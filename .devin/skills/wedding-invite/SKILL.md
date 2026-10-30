@@ -128,14 +128,13 @@ The page renders an "opening soon" RSVP state until `PUBLIC_GOOGLE_FORM_EMBED_UR
 
 A web address cannot contain `&` or spaces, so `https://Nabanita&Nishant/wedding-invite` cannot exist. The closest options are:
 
-- Free and closest: a GitHub organization such as `nabanita-nishant` with the repository renamed to `wedding-invite`, giving `https://nabanita-nishant.github.io/wedding-invite/`.
+- Free and closest: the `nabanita-nishant` GitHub organization with the repository renamed to `wedding-invite`, giving `https://nabanita-nishant.github.io/wedding-invite/`.
 - Free and shortest: the same organization with the repository named `nabanita-nishant.github.io`, giving `https://nabanita-nishant.github.io/`.
-- Free and quickest: rename the repository to `wedding-invite`, giving `https://debasmitadey663.github.io/wedding-invite/`.
 - Paid: a custom domain such as `nabanitaandnishant.com` set in Settings > Pages.
 
 The address cannot be set in `deploy.yml`. GitHub derives it from the owner name, repository name, or the custom domain in Settings > Pages; `actions/deploy-pages` has no address input. The workflow reads `base_path` and `origin` from `actions/configure-pages`, so none of these options require code changes.
 
-Status: the user leaned towards a custom domain but has not bought one, and asked whether the GitHub link could be changed instead. Do not assume a domain exists. The custom-domain DNS steps and the free options are documented in `README.md`. Whichever option is chosen, re-run the workflow afterwards so the build picks up the new base path.
+Status: the repository was transferred to the free `nabanita-nishant` organization (`https://github.com/nabanita-nishant/wedding-invite-nn`), GitHub Pages is enabled with Source: GitHub Actions, and the site is live at `https://nabanita-nishant.github.io/wedding-invite-nn/`. No custom domain has been bought; do not assume one exists. A rename to `wedding-invite` or `nabanita-nishant.github.io` is still optional. After any rename, re-run the workflow so the build picks up the new base path, and update the local `origin` remote.
 
 ## RSVP implementation
 

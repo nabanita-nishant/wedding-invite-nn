@@ -75,15 +75,16 @@ Do not add Google credentials, private spreadsheet IDs, or other secrets to the 
 
 The address cannot be set in the workflow file. GitHub decides it from the account or organization name, the repository name, or a custom domain saved in **Settings > Pages**. The workflow reads whichever address is configured and builds the site to match, so none of these options need code changes:
 
+The repository lives in the free `nabanita-nishant` GitHub organization: `https://github.com/nabanita-nishant/wedding-invite-nn`.
+
 | Option | Address | Cost | How |
 | --- | --- | --- | --- |
-| Current | `https://debasmitadey663.github.io/wedding-invite-nn/` | Free | Nothing to do |
-| Rename the repository | `https://debasmitadey663.github.io/<new-name>/` | Free | **Settings > General > Repository name** |
-| Organization, project site | `https://nabanita-nishant.github.io/wedding-invite/` | Free | Create a free organization, then **Settings > General > Transfer ownership** |
-| Organization, main site | `https://nabanita-nishant.github.io/` | Free | As above, and name the repository `nabanita-nishant.github.io` |
+| Current | `https://nabanita-nishant.github.io/wedding-invite-nn/` | Free | Nothing to do |
+| Rename to `wedding-invite` | `https://nabanita-nishant.github.io/wedding-invite/` | Free | **Settings > General > Repository name** |
+| Rename to `nabanita-nishant.github.io` | `https://nabanita-nishant.github.io/` | Free | **Settings > General > Repository name** |
 | Custom domain | `https://nabanitaandnishant.com/` | Domain fee, paid yearly to a registrar | See below |
 
-After renaming or transferring, GitHub redirects the old repository URL, but the old `github.io` address stops working. Re-run the workflow once, and check that **Settings > Pages > Source** is still **GitHub Actions**.
+After a rename, GitHub redirects the old repository URL, but the old `github.io` address stops working. Run the workflow once from the **Actions** tab, and check that **Settings > Pages > Source** is still **GitHub Actions**. Update your local copy with `git remote set-url origin https://github.com/nabanita-nishant/<new-name>.git`.
 
 ## Custom domain
 
@@ -107,13 +108,13 @@ Follow these steps in order. GitHub recommends adding the domain to the reposito
    | AAAA | @ | 2606:50c0:8001::153 |
    | AAAA | @ | 2606:50c0:8002::153 |
    | AAAA | @ | 2606:50c0:8003::153 |
-   | CNAME | www | debasmitadey663.github.io |
+   | CNAME | www | nabanita-nishant.github.io |
 
    Do not add wildcard (`*`) records.
 6. When GitHub's DNS check passes in **Settings > Pages**, tick **Enforce HTTPS**. DNS changes and the HTTPS certificate can take up to 24 hours.
-7. Re-run the **Deploy wedding invite** workflow. The site moves from `/wedding-invite-nn/` to the domain root, so it must be rebuilt for the asset paths to match.
+7. Re-run the **Deploy wedding invite** workflow. The site moves from its `github.io` path to the domain root, so it must be rebuilt for the asset paths to match.
 
-After that, `https://debasmitadey663.github.io/wedding-invite-nn/` redirects to the domain automatically. No CNAME file is needed because the site deploys through GitHub Actions.
+After that, the `nabanita-nishant.github.io` address redirects to the domain automatically. No CNAME file is needed because the site deploys through GitHub Actions.
 
 ## Dependencies and the lockfile
 
