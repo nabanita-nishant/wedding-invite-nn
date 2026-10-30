@@ -1,4 +1,5 @@
 ---
+import PartOfDayIcon from './PartOfDayIcon.astro';
 import type { WeddingEvent } from '../data/wedding';
 
 interface Props {
@@ -7,10 +8,17 @@ interface Props {
 
 const { event } = Astro.props;
 const when = event.time ? `${event.partOfDay} · ${event.time}` : event.partOfDay;
+const accentColors = event.dressCode?.wearSwatches ?? ['#d8bb89', '#bb8d50'];
+const accentStops = accentColors.length > 1 ? accentColors : [...accentColors, ...accentColors];
 ---
 
-<article class="event reveal" id={event.id} aria-labelledby={`${event.id}-name`}>
-  <p class="event__when">{when}</p>
+<article
+  class="event reveal"
+  id={event.id}
+  aria-labelledby={`${event.id}-name`}
+  style={`--accent: linear-gradient(90deg, ${accentStops.join(', ')})`}
+>
+  <p class="event__when"><PartOfDayIcon partOfDay={event.partOfDay} />{when}</p>
   <h4 class="event__name" id={`${event.id}-name`}>{event.name}</h4>
   {event.dressCode && (
     <dl class="dress">
@@ -30,7 +38,10 @@ const when = event.time ? `${event.partOfDay} · ${event.time}` : event.partOfDa
             <span class="swatches" aria-hidden="true">
               {event.dressCode.avoidSwatches?.map((color) => <span class="swatch swatch--avoid" style={`--swatch: ${color}`}></span>)}
             </span>
-            <span>{event.dressCode.avoid}</span>
+            <span>
+              {event.dressCode.avoid}
+              {event.dressCode.avoidReason && <span class="dress__reason">{event.dressCode.avoidReason}</span>}
+            </span>
           </dd>
         </div>
       )}

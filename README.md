@@ -6,13 +6,14 @@ The site is a static Astro project deployed to GitHub Pages. Wedding copy lives 
 
 ## Page structure
 
-1. Hero with the couple's names, dates, an **RSVP now** button, and a countdown
-2. Welcome message
-3. Celebrations: each day shows its venue once, then a timeline of events with time of day, dress code (what to wear and what to avoid), and an expandable description
-4. RSVP: what guests will be asked, the food and allergy note, and the Google Form
-5. Closing message with the contact for questions
+1. Hero with a marigold toran, an arch around the couple's names, falling petals, the dates, an **RSVP now** button, and a countdown
+2. Welcome message with a rotating "schoolmates · soulmates" seal on phones
+3. Celebrations: a "Dress code at a glance" colour guide, then each day's venue and a timeline of events with time of day, dress code (what to wear and what to avoid), and an expandable description
+4. RSVP: the invitation-style RSVP card, what guests will be asked, and the food and allergy note
+5. Quick questions: the couple's answers about guests, RSVPs, dress code, and changes of plan
+6. Closing message with the contact for questions
 
-The header stays fixed at the top with an RSVP button at every screen size.
+The header stays fixed at the top with an RSVP button at every screen size. Animations are gentle, turn off when a guest's phone is set to reduce motion, and never hide content if JavaScript fails.
 
 ## Run locally
 
@@ -33,24 +34,27 @@ Do not commit `.env`.
 
 When the form is configured, phones get an **Open the RSVP form** button that opens Google Forms in a new tab. Larger screens also show the form embedded on the page.
 
-## RSVP form design
+## Create the RSVP form
 
-Set up the Google Form with one response per household and branching for up to six guests:
+`tools/create-rsvp-form.gs` builds the whole Google Form and its response spreadsheet in about a minute:
 
-1. Household name - required
-2. Respondent name - required
-3. Email - optional
-4. Phone - optional
-5. Is your household attending? - required
-6. Number of attending guests - required when attending
-7. Guest details for the selected number of guests:
-   - Guest name - required
-   - Food preference: vegetarian or non-vegetarian - required
-   - Nut allergy: yes or no - required
-   - Allergy, intolerance, or ingredient details - optional unless nut allergy is yes
-8. Additional message - optional
+1. Sign in to the Google account that should own the RSVPs and open https://script.google.com.
+2. Click **New project**, delete the sample code, and paste in the contents of `tools/create-rsvp-form.gs`.
+3. Click **Run** with `createWeddingRsvpForm` selected. Approve the permission prompt: choose your account, then **Advanced > Go to project (unsafe)**. The warning appears because the script is your own and not published by Google.
+4. Open **Execution log**. It prints the form link for the website, the link to edit the form, and the responses spreadsheet.
+5. Open the form once. If Google Forms shows a **Publish** button, click it and make sure responders are set to **Anyone with the link**. Do not turn on "Limit to 1 response": it forces guests to sign in to Google.
 
-Google Forms does not support unlimited repeated fields, so use branching sections for one through six guests. Link the responses to a Google Sheet and keep allergy details in their own columns so the caterer can review them easily.
+The form asks, in order:
+
+1. Household or family name, your name, and optional phone and email
+2. Will your household be joining us? "Sorry, we can't make it" skips to the last section
+3. Which celebrations will your household join? (Friday Mehendi, Friday Haldi, Saturday ring exchange and lunch, Saturday Bengali wedding and dinner)
+4. Guest 1 to Guest 6, one section each: full name, vegetarian or non-vegetarian, nut allergy yes/no, and other allergies or ingredients to avoid. After each guest: "Is anyone else from your household coming?"
+5. Anything else you'd like us to know?
+
+Each guest's answers land in their own spreadsheet columns, so meal counts and allergies are easy to share with the caterer.
+
+To connect the form to the website, put the form link in `rsvp.formUrl` in `src/data/wedding.ts` and push. Use the full `docs.google.com/forms/.../viewform` link, not a `forms.gle` short link. Alternatively, set the `PUBLIC_GOOGLE_FORM_EMBED_URL` repository variable; it takes priority over `rsvp.formUrl`.
 
 ## Content updates
 
@@ -61,7 +65,11 @@ Update `src/data/wedding.ts` for:
 - Family names
 - RSVP deadline, if one is added
 - Contact information for Koyel or the wider family
-- Event copy or dress-code guidance
+- Event copy or dress-code guidance, including the swatch colours
+- Quick questions (`faq.items`)
+- The RSVP form link (`rsvp.formUrl`)
+
+If the celebrations or the guest limit change, update `tools/create-rsvp-form.gs` to match before creating the form.
 
 ## GitHub Pages deployment
 

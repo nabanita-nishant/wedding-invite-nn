@@ -1,7 +1,12 @@
 ---
 import DaySchedule from '../components/DaySchedule.astro';
+import DressCodeGuide from '../components/DressCodeGuide.astro';
+import Faq from '../components/Faq.astro';
 import FloralMark from '../components/FloralMark.astro';
+import HeartIcon from '../components/HeartIcon.astro';
 import SectionLabel from '../components/SectionLabel.astro';
+import Toran from '../components/Toran.astro';
+import WelcomeSeal from '../components/WelcomeSeal.astro';
 import { wedding } from '../data/wedding';
 import '../styles/global.css';
 
@@ -11,7 +16,7 @@ const { couple } = wedding;
 const title = `${couple.firstName} & ${couple.secondName} | ${wedding.date}`;
 const description = `Join ${couple.firstName} and ${couple.secondName} for their wedding celebrations on ${wedding.date} in ${wedding.location}.`;
 
-const configuredFormUrl = String(import.meta.env.PUBLIC_GOOGLE_FORM_EMBED_URL ?? '').trim();
+const configuredFormUrl = String(import.meta.env.PUBLIC_GOOGLE_FORM_EMBED_URL || wedding.rsvp.formUrl || '').trim();
 const form = configuredFormUrl ? googleFormUrls(configuredFormUrl) : undefined;
 
 function googleFormUrls(value: string) {
@@ -26,7 +31,17 @@ const navLinks = [
   { href: '#welcome', label: 'Welcome' },
   { href: '#celebrations', label: 'Celebrations' },
   { href: '#rsvp', label: 'RSVP', menuOnly: true },
+  { href: '#questions', label: 'Questions' },
   { href: '#contact', label: 'Contact' },
+];
+
+const petals = [
+  { x: '8%', size: '11px', duration: '15s', delay: '-2s', drift: '36px' },
+  { x: '22%', size: '8px', duration: '19s', delay: '-11s', drift: '-28px' },
+  { x: '38%', size: '12px', duration: '17s', delay: '-6s', drift: '24px' },
+  { x: '57%', size: '9px', duration: '21s', delay: '-15s', drift: '-34px' },
+  { x: '74%', size: '13px', duration: '16s', delay: '-9s', drift: '30px' },
+  { x: '90%', size: '9px', duration: '20s', delay: '-4s', drift: '-22px' },
 ];
 ---
 
@@ -48,6 +63,18 @@ const navLinks = [
       rel="stylesheet"
     />
     <title>{title}</title>
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        root.classList.add('reveal-on');
+        window.addEventListener('load', function () {
+          window.setTimeout(function () {
+            if (!root.hasAttribute('data-reveal-ready')) root.classList.remove('reveal-on');
+          }, 1500);
+        });
+      })();
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -78,9 +105,16 @@ const navLinks = [
     <main id="main-content">
       <section class="hero" id="home" aria-labelledby="hero-title">
         <div class="hero__texture" aria-hidden="true"></div>
-        <div class="hero__petal hero__petal--one" aria-hidden="true"></div>
-        <div class="hero__petal hero__petal--two" aria-hidden="true"></div>
+        <Toran />
+        <div class="hero__petals" aria-hidden="true">
+          {petals.map((petal) => (
+            <span
+              style={`--x: ${petal.x}; --size: ${petal.size}; --duration: ${petal.duration}; --delay: ${petal.delay}; --drift: ${petal.drift}`}
+            ></span>
+          ))}
+        </div>
         <div class="hero__content">
+          <span class="hero__arch" aria-hidden="true"></span>
           <p class="eyebrow hero__eyebrow">{wedding.hero.eyebrow}</p>
           <h1 class="hero__names" id="hero-title">
             <span>{couple.firstName}</span>
@@ -99,7 +133,7 @@ const navLinks = [
             <span>{wedding.location}</span>
           </p>
           <div class="hero__actions">
-            <a class="button button--light" href="#rsvp">RSVP now</a>
+            <a class="button button--light button--shine" href="#rsvp">RSVP now</a>
             <a class="button button--ghost" href="#celebrations">View celebrations</a>
           </div>
           <p
@@ -115,6 +149,7 @@ const navLinks = [
           <span class="hero__side-line"></span>
           <span>2026</span>
         </div>
+        <span class="hero__scallop" aria-hidden="true"></span>
       </section>
 
       <section class="welcome" id="welcome" aria-labelledby="welcome-title">
@@ -124,9 +159,12 @@ const navLinks = [
             <SectionLabel eyebrow={wedding.welcome.eyebrow} />
             <h2 class="section-title" id="welcome-title">{wedding.welcome.title}</h2>
             <p class="section-lead">{wedding.welcome.copy}</p>
-            <p class="welcome__signoff">{wedding.welcome.signoff}</p>
+            <div class="welcome__sign">
+              <p class="welcome__signoff">{wedding.welcome.signoff}</p>
+              <WelcomeSeal monogram="N&N" ringText="SCHOOLMATES · SOULMATES · SCHOOLMATES · SOULMATES · " />
+            </div>
           </div>
-          <div class="welcome-art" aria-hidden="true">
+          <div class="welcome-art reveal" aria-hidden="true">
             <div class="welcome-art__halo"></div>
             <div class="welcome-art__card">
               <span class="welcome-art__topline">A story in two chapters</span>
@@ -156,6 +194,8 @@ const navLinks = [
             </nav>
           </div>
 
+          <DressCodeGuide days={wedding.days} title={wedding.dressCodeGuide.title} intro={wedding.dressCodeGuide.intro} />
+
           {wedding.days.map((day) => <DaySchedule day={day} />)}
 
           <div class="celebrations__cta reveal">
@@ -173,13 +213,14 @@ const navLinks = [
             <p class="section-lead">{wedding.rsvp.intro}</p>
           </div>
 
-          <div class="rsvp-card">
+          <div class="rsvp-card reveal">
+            <span class="rsvp-card__seal" aria-hidden="true">RSVP</span>
             {form ? (
-              <div class="rsvp-card__ready">
+              <div class="rsvp-card__body">
                 <p class="rsvp-card__eyebrow">Reply online</p>
                 <h3>Reply for your household</h3>
                 <p class="rsvp-card__text">The form opens in a new tab and works well on phones.</p>
-                <a class="button button--primary" href={form.link} target="_blank" rel="noopener noreferrer">
+                <a class="button button--primary button--shine" href={form.link} target="_blank" rel="noopener noreferrer">
                   Open the RSVP form<span class="sr-only"> (opens in a new tab)</span>
                 </a>
                 <div class="form-frame">
@@ -188,16 +229,13 @@ const navLinks = [
                 </div>
               </div>
             ) : (
-              <div class="rsvp-card__pending">
-                <span class="rsvp-card__seal" aria-hidden="true">RSVP</span>
-                <div>
-                  <p class="rsvp-card__eyebrow">Opening soon</p>
-                  <h3>Our RSVP form is almost ready.</h3>
-                  <p class="rsvp-card__text">
-                    We are putting the final details together. Please check back here soon, or reach out to
-                    {` ${wedding.contact.name}`} if you have a question.
-                  </p>
-                </div>
+              <div class="rsvp-card__body">
+                <p class="rsvp-card__eyebrow">Opening soon</p>
+                <h3>Our RSVP form is almost ready.</h3>
+                <p class="rsvp-card__text">
+                  We are putting the final details together. Please check back here soon, or reach out to
+                  {` ${wedding.contact.name}`} if you have a question.
+                </p>
               </div>
             )}
           </div>
@@ -223,7 +261,20 @@ const navLinks = [
         </div>
       </section>
 
+      <section class="faq" id="questions" aria-labelledby="faq-title">
+        <div class="container faq__inner">
+          <div class="faq__intro reveal">
+            <SectionLabel eyebrow={wedding.faq.eyebrow} />
+            <h2 class="section-title" id="faq-title">{wedding.faq.title}</h2>
+            <p class="faq__lead">{wedding.faq.lead} <HeartIcon /></p>
+          </div>
+          <Faq items={wedding.faq.items} />
+          <p class="faq__outro reveal">{wedding.faq.outro} <HeartIcon /></p>
+        </div>
+      </section>
+
       <section class="closing" id="contact" aria-labelledby="closing-title">
+        <span class="closing__scallop" aria-hidden="true"></span>
         <div class="closing__pattern" aria-hidden="true"></div>
         <div class="closing__content reveal">
           <FloralMark />
@@ -247,6 +298,7 @@ const navLinks = [
     </footer>
 
     <script>
+      const root = document.documentElement;
       const header = document.querySelector<HTMLElement>('[data-header]');
       const menu = document.querySelector<HTMLElement>('[data-menu]');
       const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
@@ -293,6 +345,21 @@ const navLinks = [
         document.querySelectorAll<HTMLDetailsElement>('[data-event-details]').forEach((details) => {
           details.open = true;
         });
+      }
+
+      if (root.classList.contains('reveal-on')) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        document.querySelectorAll('.reveal, .reveal-trigger').forEach((element) => observer.observe(element));
+        root.setAttribute('data-reveal-ready', '');
       }
     </script>
   </body>

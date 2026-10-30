@@ -87,6 +87,15 @@ Contact copy:
 
 `For any questions, please reach out to Koyel.`
 
+Quick questions (from the couple, stored in `faq.items`):
+
+1. Can I bring someone along? Celebrations are small and intimate and planned around the invited guest list; check with the couple before bringing an additional guest.
+2. Do I need to RSVP? Yes: confirm attendance and which celebrations you'll join, to help plan food, seating, and arrangements.
+3. What should I wear? Each celebration has its own dress code; see the dress code section (`#dress-code`).
+4. What if my plans change? Tell the couple as early as possible, ideally 7–10 days' notice, and at least 3–4 days before the event if something unexpected comes up.
+
+Outro: "We're so excited to celebrate these special moments with you and make beautiful memories together!" The couple's heart emoji is rendered with `HeartIcon.astro`, not an emoji glyph.
+
 ## Architecture
 
 Use Astro with TypeScript and static output:
@@ -109,7 +118,12 @@ The current implementation includes:
 - `src/components/DaySchedule.astro` - one day: date, title, the venue card with its map button, and the event timeline.
 - `src/components/EventCard.astro` - one event: time of day (plus exact time when set), name, wear/avoid dress code with swatches, and a `<details>` description.
 - `src/components/SectionLabel.astro` and `src/components/FloralMark.astro` - editorial labels and decorative floral artwork (hidden from screen readers).
-- `src/data/wedding.ts` - typed content source of truth: `days[]` with `venue` and `events[]`, `rsvp.steps`, `contact`, and `countdown`.
+- `src/components/DressCodeGuide.astro` - "Dress code at a glance" tiles (`#dress-code`) built from every event with a dress code; each tile links to its event card.
+- `src/components/PartOfDayIcon.astro` - sunrise, sun, sunset, and moon icons for Morning, Afternoon, Evening, and Night.
+- `src/components/Faq.astro` and `src/components/HeartIcon.astro` - the Quick questions accordion (rich-text answers with links and bold text) and the heart icon.
+- `src/components/Toran.astro` and `src/components/WelcomeSeal.astro` - the marigold-and-mango-leaf garland under the header and the rotating "schoolmates · soulmates" seal shown beside the welcome sign-off on phones.
+- `src/data/wedding.ts` - typed content source of truth: `days[]` with `venue` and `events[]`, `dressCodeGuide`, `rsvp` (`formUrl`, `steps`), `faq`, `contact`, and `countdown`.
+- `tools/create-rsvp-form.gs` - Google Apps Script that creates the RSVP Google Form and its response spreadsheet.
 - `public/favicon.svg` - the N&N mark used as the favicon.
 - `.github/workflows/deploy.yml` - GitHub Pages build and deployment workflow.
 - `README.md` - local setup, Google Form field design, deployment, and URL options.
@@ -122,7 +136,8 @@ The page renders an "opening soon" RSVP state until `PUBLIC_GOOGLE_FORM_EMBED_UR
 - RSVP is reachable from the fixed header button at every screen width, the hero "RSVP now" button, the prompt after the schedule, and the closing section.
 - The separate Venues and Food sections were folded in: each day shows its venue once, and the food and allergy copy appears as the "What we will ask" steps beside the RSVP card.
 - Event cards keep the time of day, name, and dress code visible. Only the description is behind "About this celebration", which opens automatically on desktop.
-- Content is visible without JavaScript; scroll animations are CSS scroll-driven animations inside `@supports`.
+- Most guests use phones, so the phone layout gets the richest treatment: the toran, an arch around the names, falling petals, scalloped section edges, colour strips on event cards taken from their dress-code swatches, part-of-day icons, an invitation-style RSVP card with a wax-seal badge, and an accordion for Quick questions.
+- Content is visible without JavaScript. Scroll reveals use IntersectionObserver behind the `reveal-on` class with a 1.5s failsafe, and every animation is off when the device asks for reduced motion.
 
 ## Site address
 
@@ -141,15 +156,16 @@ Status: the repository was transferred to the free `nabanita-nishant` organizati
 The first release uses a Google Form embed:
 
 - Keep the surrounding RSVP section fully branded.
-- Show an honest setup state when `PUBLIC_GOOGLE_FORM_EMBED_URL` is empty.
+- The form link comes from `PUBLIC_GOOGLE_FORM_EMBED_URL` if set, otherwise `rsvp.formUrl`. Show the honest "opening soon" state while both are empty.
 - Never claim a placeholder form submitted successfully.
-- Document the Google Form field design for up to six guests.
-- The form should collect household attendance and per-guest name, vegetarian/non-vegetarian choice, nut allergy status, and allergy or ingredient notes.
+- The form collects household attendance, which celebrations the household will join (household-level checkboxes), and per-guest name, vegetarian/non-vegetarian choice, nut allergy status, and allergy or ingredient notes, for up to six guests.
 - Email and phone are optional.
 - There is no RSVP deadline yet.
-- Do not add event-by-event attendance restrictions yet.
+- Do not restrict who can choose which celebration yet.
 
-Google Forms cannot dynamically create unlimited repeated fields. Prefer branching based on the number of attending guests, with a maximum of six, or clearly documented fixed guest sections.
+`tools/create-rsvp-form.gs` builds the form: after each guest section, "Is anyone else from your household coming?" either opens the next guest section or jumps to the final section, which avoids one branch path per household size.
+
+Status: the form has not been created yet. The couple (or Debasmita) must run the script in the Google account that should own the responses and send back the `docs.google.com/forms/.../viewform` link; then set `rsvp.formUrl`, build, and push.
 
 ## GitHub Pages deployment
 

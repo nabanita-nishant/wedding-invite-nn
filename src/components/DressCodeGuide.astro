@@ -1,0 +1,40 @@
+---
+import PartOfDayIcon from './PartOfDayIcon.astro';
+import type { WeddingDay } from '../data/wedding';
+
+interface Props {
+  days: WeddingDay[];
+  title: string;
+  intro: string;
+}
+
+const { days, title, intro } = Astro.props;
+const looks = days.flatMap((day) =>
+  day.events.flatMap((event) => (event.dressCode ? [{ day, event, dressCode: event.dressCode }] : [])),
+);
+---
+
+<section class="dress-guide" id="dress-code" aria-labelledby="dress-code-title">
+  <div class="dress-guide__head reveal">
+    <h3 id="dress-code-title">{title}</h3>
+    <p>{intro}</p>
+  </div>
+  <ul class="dress-guide__list">
+    {looks.map(({ day, event, dressCode }, index) => (
+      <li class="reveal" style={`--reveal-delay: ${index * 90}ms`}>
+        <a class="look" href={`#${event.id}`}>
+          <span class="look__swatches" aria-hidden="true">
+            {dressCode.wearSwatches.map((color) => <span class="swatch swatch--large" style={`--swatch: ${color}`}></span>)}
+          </span>
+          <span class="look__when">
+            <PartOfDayIcon partOfDay={event.partOfDay} />
+            {day.weekday} {event.partOfDay.toLowerCase()}
+          </span>
+          <span class="look__name">{event.name}</span>
+          <span class="look__wear">{dressCode.wear}</span>
+          {dressCode.avoid && <span class="look__avoid">Avoid {dressCode.avoid.toLowerCase()}</span>}
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

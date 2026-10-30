@@ -1,0 +1,25 @@
+---
+import type { FaqItem } from '../data/wedding';
+
+interface Props {
+  items: FaqItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="faq__list">
+  {items.map((item, index) => (
+    <details class="faq__item reveal" style={`--reveal-delay: ${index * 80}ms`}>
+      <summary>
+        <span class="faq__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+        <span class="faq__question">{item.question}</span>
+      </summary>
+      <p class="faq__answer">
+        {item.answer.map((part) =>
+          typeof part === 'string' ? part : part.href ? <a href={part.href}>{part.text}</a> : <strong>{part.text}</strong>,
+        )}
+      </p>
+    </details>
+  ))}
+</div>

@@ -1,0 +1,21 @@
+---
+interface Props {
+  monogram: string;
+  ringText: string;
+}
+
+const { monogram, ringText } = Astro.props;
+---
+
+<svg class="welcome-seal" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+  <defs>
+    <path id="welcome-seal-ring" d="M60 60m-43 0a43 43 0 1 1 86 0a43 43 0 1 1-86 0" />
+  </defs>
+  <circle class="welcome-seal__disc" cx="60" cy="60" r="58" />
+  <circle class="welcome-seal__line" cx="60" cy="60" r="53" />
+  <circle class="welcome-seal__line" cx="60" cy="60" r="33" />
+  <g class="welcome-seal__ring">
+    <text class="welcome-seal__text"><textPath href="#welcome-seal-ring" textLength="266">{ringText}</textPath></text>
+  </g>
+  <text class="welcome-seal__mono" x="60" y="69" text-anchor="middle">{monogram}</text>
+</svg>
