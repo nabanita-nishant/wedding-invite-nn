@@ -58,7 +58,8 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 - The site must remain statically buildable with `npm run build`.
 - Keep deployment configuration in `.github/workflows/deploy.yml`.
 - Project-page paths must use Astro's `base` configuration. The workflow reads `base_path` and `origin` from `actions/configure-pages`, so renaming the repository, moving it to an organization, or adding a custom domain in Settings > Pages needs no code change.
-- GitHub Pages must be enabled with **Source: GitHub Actions** for deployment to succeed.
+- GitHub Pages must be enabled with **Source: GitHub Actions** for deployment to succeed. Until it is, `actions/configure-pages` fails with "Get Pages site failed". The default `GITHUB_TOKEN` cannot enable Pages, so this is a one-time manual setting for the repository owner.
+- The site address cannot be set in `deploy.yml`. It comes from the owner name, the repository name, or the custom domain saved in Settings > Pages. Do not add CNAME files or hard-coded base paths; the Actions-based deployment ignores CNAME files.
 - Do not assume server-side rendering, API routes, server secrets, or filesystem writes at runtime.
 - True guest-specific link validation requires a future server-side service; do not expose a guest list in the static bundle.
 

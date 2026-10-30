@@ -65,17 +65,55 @@ Update `src/data/wedding.ts` for:
 
 ## GitHub Pages deployment
 
-1. In the repository, open **Settings > Pages** and set **Source** to **GitHub Actions**.
+1. In the repository, open **Settings > Pages**. Under **Build and deployment**, set **Source** to **GitHub Actions**. This one-time switch is required: until it is set, the **Configure GitHub Pages** step fails with "Get Pages site failed". The workflow cannot turn Pages on by itself, because the default Actions token is not allowed to change repository settings.
 2. Optional: add a repository variable named `PUBLIC_GOOGLE_FORM_EMBED_URL` under **Settings > Secrets and variables > Actions > Variables** once the form is ready.
 3. Push to `main` or run the **Deploy wedding invite** workflow manually from the **Actions** tab.
 
-The workflow reads the site address from GitHub Pages settings, so these changes need no code edits:
-
-- Renaming the repository, for example to `wedding-invite`
-- Moving the repository to a GitHub organization, for example `nabanita-nishant`, which gives `https://nabanita-nishant.github.io/wedding-invite/`
-- Adding a custom domain in **Settings > Pages**
-
 Do not add Google credentials, private spreadsheet IDs, or other secrets to the repository.
+
+## Changing the site address
+
+The address cannot be set in the workflow file. GitHub decides it from the account or organization name, the repository name, or a custom domain saved in **Settings > Pages**. The workflow reads whichever address is configured and builds the site to match, so none of these options need code changes:
+
+| Option | Address | Cost | How |
+| --- | --- | --- | --- |
+| Current | `https://debasmitadey663.github.io/wedding-invite-nn/` | Free | Nothing to do |
+| Rename the repository | `https://debasmitadey663.github.io/<new-name>/` | Free | **Settings > General > Repository name** |
+| Organization, project site | `https://nabanita-nishant.github.io/wedding-invite/` | Free | Create a free organization, then **Settings > General > Transfer ownership** |
+| Organization, main site | `https://nabanita-nishant.github.io/` | Free | As above, and name the repository `nabanita-nishant.github.io` |
+| Custom domain | `https://nabanitaandnishant.com/` | Domain fee, paid yearly to a registrar | See below |
+
+After renaming or transferring, GitHub redirects the old repository URL, but the old `github.io` address stops working. Re-run the workflow once, and check that **Settings > Pages > Source** is still **GitHub Actions**.
+
+## Custom domain
+
+The invite can be served from its own domain, for example `nabanitaandnishant.com`, at the domain root. A domain cannot be invented in a file: it has to be bought from a registrar and pointed at GitHub through DNS.
+
+Follow these steps in order. GitHub recommends adding the domain to the repository before creating DNS records so nobody else can claim it.
+
+1. Make sure GitHub Pages is enabled with **Source: GitHub Actions** (see above).
+2. Buy the domain from any domain registrar.
+3. Recommended: verify the domain in your GitHub account under **Settings > Pages > Add a domain**. GitHub shows a TXT record to add at your registrar, which stops anyone else from using the domain.
+4. In this repository, open **Settings > Pages**, enter the domain under **Custom domain**, and save.
+5. In the registrar's DNS settings, remove any default parking or forwarding records for `@` and `www`, then add:
+
+   | Type | Name | Value |
+   | --- | --- | --- |
+   | A | @ | 185.199.108.153 |
+   | A | @ | 185.199.109.153 |
+   | A | @ | 185.199.110.153 |
+   | A | @ | 185.199.111.153 |
+   | AAAA | @ | 2606:50c0:8000::153 |
+   | AAAA | @ | 2606:50c0:8001::153 |
+   | AAAA | @ | 2606:50c0:8002::153 |
+   | AAAA | @ | 2606:50c0:8003::153 |
+   | CNAME | www | debasmitadey663.github.io |
+
+   Do not add wildcard (`*`) records.
+6. When GitHub's DNS check passes in **Settings > Pages**, tick **Enforce HTTPS**. DNS changes and the HTTPS certificate can take up to 24 hours.
+7. Re-run the **Deploy wedding invite** workflow. The site moves from `/wedding-invite-nn/` to the domain root, so it must be rebuilt for the asset paths to match.
+
+After that, `https://debasmitadey663.github.io/wedding-invite-nn/` redirects to the domain automatically. No CNAME file is needed because the site deploys through GitHub Actions.
 
 ## Dependencies and the lockfile
 

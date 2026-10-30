@@ -129,10 +129,13 @@ The page renders an "opening soon" RSVP state until `PUBLIC_GOOGLE_FORM_EMBED_UR
 A web address cannot contain `&` or spaces, so `https://Nabanita&Nishant/wedding-invite` cannot exist. The closest options are:
 
 - Free and closest: a GitHub organization such as `nabanita-nishant` with the repository renamed to `wedding-invite`, giving `https://nabanita-nishant.github.io/wedding-invite/`.
+- Free and shortest: the same organization with the repository named `nabanita-nishant.github.io`, giving `https://nabanita-nishant.github.io/`.
 - Free and quickest: rename the repository to `wedding-invite`, giving `https://debasmitadey663.github.io/wedding-invite/`.
 - Paid: a custom domain such as `nabanitaandnishant.com` set in Settings > Pages.
 
-The workflow derives the base path and origin from GitHub Pages, so none of these options require code changes.
+The address cannot be set in `deploy.yml`. GitHub derives it from the owner name, repository name, or the custom domain in Settings > Pages; `actions/deploy-pages` has no address input. The workflow reads `base_path` and `origin` from `actions/configure-pages`, so none of these options require code changes.
+
+Status: the user leaned towards a custom domain but has not bought one, and asked whether the GitHub link could be changed instead. Do not assume a domain exists. The custom-domain DNS steps and the free options are documented in `README.md`. Whichever option is chosen, re-run the workflow afterwards so the build picks up the new base path.
 
 ## RSVP implementation
 
