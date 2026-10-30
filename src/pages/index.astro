@@ -1,6 +1,5 @@
 ---
 import DaySchedule from '../components/DaySchedule.astro';
-import DressCodeGuide from '../components/DressCodeGuide.astro';
 import Faq from '../components/Faq.astro';
 import FloralMark from '../components/FloralMark.astro';
 import HeartIcon from '../components/HeartIcon.astro';
@@ -193,8 +192,6 @@ const petals = [
               ))}
             </nav>
           </div>
-
-          <DressCodeGuide days={wedding.days} title={wedding.dressCodeGuide.title} intro={wedding.dressCodeGuide.intro} />
 
           {wedding.days.map((day) => <DaySchedule day={day} />)}
 

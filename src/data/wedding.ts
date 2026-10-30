@@ -201,7 +201,7 @@ export const wedding = {
         question: 'What should I wear?',
         answer: [
           'Each celebration has its own dress code! Please check the ',
-          { text: 'dress code', href: '#dress-code' },
+          { text: 'celebrations', href: '#celebrations' },
           " section for the suggested colours and details for each event. We can't wait to see you all dressed up!",
         ],
       },

@@ -39,7 +39,7 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 ## Guest experience rules
 
 - RSVP must always be one tap away: keep the RSVP button in the fixed header at every screen width, the "RSVP now" button in the hero, the RSVP prompt after the schedule, and the closing RSVP button.
-- Keep the section order Hero, Welcome, Celebrations (opening with the "Dress code at a glance" guide, `#dress-code`), RSVP, Quick questions (`#questions`), Closing. Do not add sections between Celebrations and RSVP without a clear guest need.
+- Keep the section order Hero, Welcome, Celebrations, RSVP, Quick questions (`#questions`), Closing. Do not add sections between Celebrations and RSVP without a clear guest need.
 - Event cards must show time of day, name, and dress code (wear and avoid) without interaction. Only the longer description sits in the `<details>` disclosure, which opens by default on screens wider than 820px.
 - Most guests use phones. Design and review every change at 390px and 360px first.
 - Content must never depend on JavaScript to become visible. An inline script in `<head>` adds `reveal-on` only when IntersectionObserver exists and reduced motion is off; the page script then reveals `.reveal` elements as they scroll into view. If that script has not run within 1.5s of `load`, the inline script removes `reveal-on` so everything shows.
