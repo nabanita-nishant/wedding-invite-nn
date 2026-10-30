@@ -155,9 +155,9 @@ Configure `astro.config.mjs` to read `BASE_PATH` and `SITE_URL` from the environ
 
 1. Check out the repository.
 2. Set up Node 22.
-3. Run `actions/configure-pages` to get `base_path` and `origin`. This step fails early with a clear message if Pages is not enabled with Source: GitHub Actions.
-4. Run `npm ci`.
-5. Run `npm run check`.
+3. Run `npm ci`.
+4. Run `npm run check`.
+5. Run `actions/configure-pages` to get `base_path` and `origin`. This step fails with "Get Pages site failed" if Pages is not enabled with Source: GitHub Actions; it runs after install and check so those still get verified.
 6. Run `npm run build` with `BASE_PATH` set to the `base_path` output and `SITE_URL` set to the `origin` output.
 7. Publish `dist/` with the official Pages actions.
 

@@ -28,15 +28,15 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Configure GitHub Pages
-        id: pages
-        uses: actions/configure-pages@v5
-
       - name: Install dependencies
         run: npm ci
 
       - name: Check TypeScript and Astro files
         run: npm run check
+
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
 
       - name: Build static site
         run: npm run build
