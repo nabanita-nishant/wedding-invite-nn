@@ -1,0 +1,32 @@
+---
+import EventCard from './EventCard.astro';
+import type { WeddingDay } from '../data/wedding';
+
+interface Props {
+  day: WeddingDay;
+}
+
+const { day } = Astro.props;
+---
+
+<article class="day" id={day.id} aria-labelledby={`${day.id}-title`}>
+  <header class="day__header reveal">
+    <p class="day__date"><span class="day__weekday">{day.weekday}</span> {day.date}</p>
+    <h3 class="day__title" id={`${day.id}-title`}>{day.title}</h3>
+    <div class="venue">
+      <p class="venue__label">Venue</p>
+      {day.venue.name && <p class="venue__name">{day.venue.name}</p>}
+      {day.venue.address && <p class="venue__address">{day.venue.address}</p>}
+      <a class="button button--outline button--compact" href={day.venue.mapUrl} target="_blank" rel="noopener noreferrer">
+        Open in Google Maps<span class="sr-only"> (opens in a new tab)</span>
+      </a>
+    </div>
+  </header>
+  <ol class="timeline">
+    {day.events.map((event) => (
+      <li class="timeline__item">
+        <EventCard event={event} />
+      </li>
+    ))}
+  </ol>
+</article>

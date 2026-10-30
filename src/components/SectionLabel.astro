@@ -1,14 +1,12 @@
 ---
 interface Props {
   eyebrow: string;
-  number?: string;
 }
 
-const { eyebrow, number } = Astro.props;
+const { eyebrow } = Astro.props;
 ---
 
-<div class="section-label">
-  {number && <span class="section-label__number">{number}</span>}
-  <span class="section-label__line"></span>
+<p class="section-label">
+  <span class="section-label__line" aria-hidden="true"></span>
   <span>{eyebrow}</span>
-</div>
+</p>

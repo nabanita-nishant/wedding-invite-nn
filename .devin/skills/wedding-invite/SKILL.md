@@ -104,19 +104,35 @@ Do not use server-side rendering or Astro API routes. GitHub Pages cannot run th
 
 The current implementation includes:
 
-- `src/pages/index.astro` - one-page invitation composition, mobile navigation, countdown, reveal behavior, and RSVP state.
-- `src/styles/global.css` - Heritage Modern tokens, responsive layout, typography, illustrations, motion, focus states, and reduced-motion rules.
-- `src/components/EventCard.astro` - reusable event card with optional time, dress code, address, and map link.
-- `src/components/SectionLabel.astro` and `src/components/FloralMark.astro` - repeated editorial labels and inline floral artwork.
-- `src/data/wedding.ts` - the event and invitation content source of truth.
+- `src/pages/index.astro` - page composition (Hero, Welcome, Celebrations, RSVP, Closing), fixed header with an always-visible RSVP button, mobile menu, day-based countdown, desktop-open event details, and the RSVP form state.
+- `src/styles/global.css` - Heritage Modern tokens, accessible contrast tokens (`--gold-text`), responsive layout, timeline, dress-code swatches, buttons, CSS-only scroll animations, focus states, and reduced-motion rules.
+- `src/components/DaySchedule.astro` - one day: date, title, the venue card with its map button, and the event timeline.
+- `src/components/EventCard.astro` - one event: time of day (plus exact time when set), name, wear/avoid dress code with swatches, and a `<details>` description.
+- `src/components/SectionLabel.astro` and `src/components/FloralMark.astro` - editorial labels and decorative floral artwork (hidden from screen readers).
+- `src/data/wedding.ts` - typed content source of truth: `days[]` with `venue` and `events[]`, `rsvp.steps`, `contact`, and `countdown`.
 - `public/favicon.svg` - the N&N mark used as the favicon.
 - `.github/workflows/deploy.yml` - GitHub Pages build and deployment workflow.
-- `README.md` - local setup, Google Form field design, and deployment instructions.
-- `AGENTS.md` - project rules for future agents and contributors.
+- `README.md` - local setup, Google Form field design, deployment, and URL options.
+- `AGENTS.md` - project rules for future agents and contributors, including guest-experience and dependency rules.
 
-The page renders a polished RSVP setup state until `PUBLIC_GOOGLE_FORM_EMBED_URL` is configured. It renders the real iframe only when that public URL is present.
+The page renders an "opening soon" RSVP state until `PUBLIC_GOOGLE_FORM_EMBED_URL` is configured. When configured, it shows an "Open the RSVP form" button (new tab) on every screen and the embedded form only on screens wider than 820px. The variable accepts the normal viewform link or the embed link.
 
-The package overrides pin a small number of transitive packages to versions that include their published JavaScript entrypoints in the current npm mirror. Keep them unless dependency installation and CI are verified against a different registry.
+## Guest experience decisions
+
+- RSVP is reachable from the fixed header button at every screen width, the hero "RSVP now" button, the prompt after the schedule, and the closing section.
+- The separate Venues and Food sections were folded in: each day shows its venue once, and the food and allergy copy appears as the "What we will ask" steps beside the RSVP card.
+- Event cards keep the time of day, name, and dress code visible. Only the description is behind "About this celebration", which opens automatically on desktop.
+- Content is visible without JavaScript; scroll animations are CSS scroll-driven animations inside `@supports`.
+
+## Site address
+
+A web address cannot contain `&` or spaces, so `https://Nabanita&Nishant/wedding-invite` cannot exist. The closest options are:
+
+- Free and closest: a GitHub organization such as `nabanita-nishant` with the repository renamed to `wedding-invite`, giving `https://nabanita-nishant.github.io/wedding-invite/`.
+- Free and quickest: rename the repository to `wedding-invite`, giving `https://debasmitadey663.github.io/wedding-invite/`.
+- Paid: a custom domain such as `nabanitaandnishant.com` set in Settings > Pages.
+
+The workflow derives the base path and origin from GitHub Pages, so none of these options require code changes.
 
 ## RSVP implementation
 
@@ -138,11 +154,14 @@ Google Forms cannot dynamically create unlimited repeated fields. Prefer branchi
 Configure `astro.config.mjs` to read `BASE_PATH` and `SITE_URL` from the environment. The GitHub Actions workflow should:
 
 1. Check out the repository.
-2. Set up Node.
-3. Run `npm ci`.
-4. Run `npm run check`.
-5. Run `npm run build` with `BASE_PATH=/${{ github.event.repository.name }}`.
-6. Publish `dist/` with the official Pages actions.
+2. Set up Node 22.
+3. Run `actions/configure-pages` to get `base_path` and `origin`. This step fails early with a clear message if Pages is not enabled with Source: GitHub Actions.
+4. Run `npm ci`.
+5. Run `npm run check`.
+6. Run `npm run build` with `BASE_PATH` set to the `base_path` output and `SITE_URL` set to the `origin` output.
+7. Publish `dist/` with the official Pages actions.
+
+Every `resolved` URL in `package-lock.json` must use `https://registry.npmjs.org/`. The developer machine installs through Dell's Artifactory mirror, which GitHub cannot reach. The first deployment failed after 8 minutes with npm's "Exit handler never called!" for exactly this reason. Rewrite the lockfile URLs after every install, as documented in `AGENTS.md`.
 
 Do not commit `.env`, form secrets, or private spreadsheet credentials.
 
@@ -167,6 +186,7 @@ A complete first release must:
 - Use the Friday address and both supplied map links.
 - Include dress-code information without creating access restrictions.
 - Explain vegetarian, non-vegetarian, and allergy information.
-- Provide a clear RSVP section with a Google Form setup state or configured iframe.
-- Work at mobile and desktop widths.
-- Build successfully as a static site for GitHub Pages.
+- Provide a clear RSVP section with a Google Form setup state or configured form.
+- Keep RSVP one tap away from anywhere on the page.
+- Work at mobile and desktop widths without horizontal scrolling.
+- Build successfully as a static site for GitHub Pages from a lockfile that uses the public npm registry.
