@@ -102,6 +102,152 @@ svg {
   transform: translateY(0);
 }
 
+.doors {
+  display: none;
+}
+
+.doors--ready {
+  position: fixed;
+  z-index: 200;
+  inset: 0;
+  display: flex;
+  background: transparent;
+}
+
+.doors__left,
+.doors__right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(147, 48, 60, 0.6), transparent 65%),
+    linear-gradient(160deg, #611d29, var(--maroon-deep) 60%);
+  transition: transform 1.6s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.doors__left {
+  border-right: 1px solid rgba(216, 187, 137, 0.4);
+  transform-origin: left center;
+}
+
+.doors__right {
+  border-left: 1px solid rgba(216, 187, 137, 0.4);
+  transform-origin: right center;
+}
+
+.doors__left::before,
+.doors__right::before {
+  position: absolute;
+  inset: 0.75rem;
+  border: 1px solid rgba(216, 187, 137, 0.3);
+  border-radius: 2px;
+  content: '';
+  pointer-events: none;
+}
+
+.doors__left::after,
+.doors__right::after {
+  position: absolute;
+  inset: 1.5rem;
+  border: 1px solid rgba(216, 187, 137, 0.15);
+  border-radius: 2px;
+  content: '';
+  pointer-events: none;
+}
+
+.doors__ornament {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--ivory);
+  text-align: center;
+}
+
+.doors__ornament .floral-mark {
+  width: 4.5rem;
+  opacity: 0.8;
+}
+
+.doors__names {
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 0.9;
+}
+
+.doors__names i {
+  color: var(--gold-light);
+  font-family: var(--serif);
+  font-size: 0.45em;
+}
+
+.doors__date {
+  color: var(--gold-light);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.doors__open {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--ivory);
+  background: radial-gradient(circle at 35% 30%, #93303c, var(--maroon-deep) 70%);
+  box-shadow: 0 8px 30px rgba(40, 12, 18, 0.5);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  animation: door-pulse 2.4s ease-in-out infinite;
+}
+
+.doors__open-ring {
+  position: absolute;
+  inset: 0.35rem;
+  border: 1px solid rgba(216, 187, 137, 0.6);
+  border-radius: 50%;
+}
+
+.doors__open-text {
+  font-family: var(--serif);
+  font-size: 0.75rem;
+  font-style: italic;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.doors--opening .doors__left {
+  transform: perspective(1200px) rotateY(-105deg);
+}
+
+.doors--opening .doors__right {
+  transform: perspective(1200px) rotateY(105deg);
+}
+
+.doors--opening .doors__open {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.doors--opening .doors__left,
+.doors--opening .doors__right {
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
+}
+
 .container {
   width: min(1120px, 100% - 2.5rem);
   margin-inline: auto;
@@ -1751,6 +1897,48 @@ svg {
   stroke-dashoffset: 140;
 }
 
+@keyframes door-pulse {
+  0%,
+  100% {
+    box-shadow: 0 8px 30px rgba(40, 12, 18, 0.5), 0 0 0 0 rgba(216, 187, 137, 0.5);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(40, 12, 18, 0.5), 0 0 0 14px rgba(216, 187, 137, 0);
+  }
+}
+
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) rotate(-14deg) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) rotate(-7deg) scale(1);
+  }
+}
+
+@keyframes halo-breathe {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(35deg) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) rotate(38deg) scale(1.04);
+  }
+}
+
+@keyframes stamp-in {
+  from {
+    opacity: 0;
+    transform: rotate(15deg) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(8deg) scale(1);
+  }
+}
+
 @keyframes hero-rise {
   from {
     opacity: 0;
@@ -1929,6 +2117,18 @@ svg {
 
   .faq__item[open] .faq__answer {
     animation: faq-open 320ms ease both;
+  }
+
+  .welcome-art__card {
+    animation: card-appear 1s cubic-bezier(0.2, 0.75, 0.2, 1) 0.3s both;
+  }
+
+  .welcome-art__halo {
+    animation: halo-breathe 8s ease-in-out infinite;
+  }
+
+  .welcome-art__stamp {
+    animation: stamp-in 0.7s ease 1s both;
   }
 }
 
@@ -2123,9 +2323,54 @@ svg {
     letter-spacing: 0.14em;
   }
 
-  .hero__dot,
-  .welcome-art {
+  .hero__dot {
     display: none;
+  }
+
+  .welcome-art {
+    min-height: 280px;
+    margin-top: 1rem;
+  }
+
+  .welcome-art__halo {
+    top: 1.5rem;
+    width: 15rem;
+    height: 15rem;
+  }
+
+  .welcome-art__card {
+    top: 3.5rem;
+    width: 11rem;
+    min-height: 14rem;
+    padding: 1.5rem 0.75rem 1.1rem;
+  }
+
+  .welcome-art__topline {
+    font-size: 0.5rem;
+  }
+
+  .welcome-art__card .floral-mark {
+    width: 3.8rem;
+    margin: 1.4rem 0 1rem;
+  }
+
+  .welcome-art__names {
+    font-size: 2.6rem;
+  }
+
+  .welcome-art__names i {
+    font-size: 1.3rem;
+  }
+
+  .welcome-art__caption {
+    margin-top: 1.2rem;
+    font-size: 0.65rem;
+  }
+
+  .welcome-art__stamp {
+    right: 0.5rem;
+    bottom: 1rem;
+    font-size: 0.65rem;
   }
 
   .hero__actions {

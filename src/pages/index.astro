@@ -76,6 +76,27 @@ const petals = [
     </script>
   </head>
   <body>
+    <div class="doors" aria-hidden="true" data-doors>
+      <div class="doors__left">
+        <div class="doors__ornament">
+          <FloralMark />
+          <span class="doors__names">N <i>&amp;</i> N</span>
+          <span class="doors__date">{wedding.date}</span>
+        </div>
+      </div>
+      <div class="doors__right">
+        <div class="doors__ornament">
+          <FloralMark />
+          <span class="doors__names">N <i>&amp;</i> N</span>
+          <span class="doors__date">{wedding.location}</span>
+        </div>
+      </div>
+      <button class="doors__open" type="button" data-doors-open>
+        <span class="doors__open-ring"></span>
+        <span class="doors__open-text">Open<br />the invite</span>
+      </button>
+    </div>
+
     <a class="skip-link" href="#main-content">Skip to content</a>
 
     <header class="site-header" data-header>
@@ -357,6 +378,30 @@ const petals = [
         );
         document.querySelectorAll('.reveal, .reveal-trigger').forEach((element) => observer.observe(element));
         root.setAttribute('data-reveal-ready', '');
+      }
+
+      const doors = document.querySelector<HTMLElement>('[data-doors]');
+      const doorsOpen = document.querySelector<HTMLButtonElement>('[data-doors-open]');
+
+      if (doors && doorsOpen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.body.style.overflow = 'hidden';
+        doors.classList.add('doors--ready');
+
+        const open = () => {
+          doors.classList.add('doors--opening');
+          document.body.style.overflow = '';
+          doors.addEventListener('transitionend', () => {
+            doors.remove();
+          }, { once: true });
+          setTimeout(() => doors.remove(), 2500);
+        };
+
+        doorsOpen.addEventListener('click', open);
+        doorsOpen.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); }
+        });
+      } else if (doors) {
+        doors.remove();
       }
     </script>
   </body>
