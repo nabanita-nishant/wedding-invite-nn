@@ -68,10 +68,7 @@ Saturday, 5 December 2026:
 1. Morning ring exchange and court marriage
    - A special morning as we exchange rings and begin our next chapter together
    - Dress code: soft pastels and light, subtle colours; avoid white
-2. Afternoon wedding lunch
-   - Good food, familiar faces, and time to enjoy being together
-   - This is a timeline item, not a separate RSVP event
-3. Evening Bengali wedding ceremony and dinner
+2. Evening Bengali wedding ceremony and dinner
    - An intimate Bengali wedding ceremony followed by dinner, celebrating love, family, and tradition
    - Dress code: any colour except red and maroon
 

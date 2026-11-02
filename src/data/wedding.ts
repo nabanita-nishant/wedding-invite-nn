@@ -126,13 +126,7 @@ export const wedding = {
             avoidSwatches: ['#ffffff'],
           },
         },
-        {
-          id: 'wedding-lunch',
-          name: 'Wedding lunch',
-          partOfDay: 'Afternoon',
-          time: '',
-          description: 'Good food, familiar faces, and time to enjoy being together.',
-        },
+
         {
           id: 'bengali-wedding',
           name: 'Bengali wedding & dinner',

@@ -217,20 +217,13 @@ const petals = [
                     <td>1</td>
                     <td>2</td>
                     <td>3</td>
-                    <td><span class="mini-cal__hl">4</span></td>
-                    <td><span class="mini-cal__hl">5</span></td>
+                    <td><a href="#friday" class="mini-cal__hl">4</a></td>
+                    <td><a href="#saturday" class="mini-cal__hl">5</a></td>
                     <td>6</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <nav class="day-jump" aria-label="Jump to a day">
-              {wedding.days.map((day) => (
-                <a href={`#${day.id}`}>
-                  {day.weekday} <span>{day.shortDate}</span>
-                </a>
-              ))}
-            </nav>
           </div>
 
           {wedding.days.map((day) => <DaySchedule day={day} />)}
@@ -385,12 +378,27 @@ const petals = [
       }
 
       if (root.classList.contains('reveal-on')) {
+        // Mark celebrations elements for bidirectional scroll animations (entry + exit)
+        document.querySelectorAll('#celebrations .reveal, #celebrations .reveal-trigger').forEach((el) => {
+          el.setAttribute('data-scroll-anim', '');
+        });
+
+        // Set calendar highlight stagger delays
+        document.querySelectorAll<HTMLElement>('.mini-cal__hl').forEach((hl, i) => {
+          hl.style.setProperty('--cal-delay', `${300 + i * 200}ms`);
+        });
+
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              entry.target.classList.add('is-visible');
-              observer.unobserve(entry.target);
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                if (!entry.target.hasAttribute('data-scroll-anim')) {
+                  observer.unobserve(entry.target);
+                }
+              } else if (entry.target.hasAttribute('data-scroll-anim') && entry.boundingClientRect.top > 0) {
+                entry.target.classList.remove('is-visible');
+              }
             });
           },
           { rootMargin: '0px 0px -8% 0px' },
