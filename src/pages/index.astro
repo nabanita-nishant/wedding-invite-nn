@@ -202,8 +202,27 @@ const petals = [
           <div class="celebrations__intro reveal">
             <div>
               <SectionLabel eyebrow="Wedding celebrations" />
-              <h2 class="section-title" id="celebrations-title">Two days, many little moments.</h2>
-              <p class="section-lead">Where to go and what to wear for every celebration.</p>
+              <h2 class="sr-only" id="celebrations-title">Wedding celebrations</h2>
+              <table class="mini-cal" aria-label="December 2026, first week — the 4th and 5th are wedding days" role="presentation">
+                <caption class="mini-cal__caption">December 2026</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">M</th><th scope="col">T</th><th scope="col">W</th>
+                    <th scope="col">T</th><th scope="col">F</th><th scope="col">S</th><th scope="col">S</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td><span class="mini-cal__hl">4</span></td>
+                    <td><span class="mini-cal__hl">5</span></td>
+                    <td>6</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <nav class="day-jump" aria-label="Jump to a day">
               {wedding.days.map((day) => (
@@ -377,6 +396,13 @@ const petals = [
           { rootMargin: '0px 0px -8% 0px' },
         );
         document.querySelectorAll('.reveal, .reveal-trigger').forEach((element) => observer.observe(element));
+
+        document.querySelectorAll('.timeline').forEach((tl) => {
+          tl.querySelectorAll<HTMLElement>('.timeline__item').forEach((item, i) => {
+            item.style.setProperty('--tl-delay', `${i * 150}ms`);
+          });
+        });
+
         root.setAttribute('data-reveal-ready', '');
       }
 
@@ -393,7 +419,7 @@ const petals = [
           doors.addEventListener('transitionend', () => {
             doors.remove();
           }, { once: true });
-          setTimeout(() => doors.remove(), 2500);
+          setTimeout(() => doors.remove(), 3000);
         };
 
         doorsOpen.addEventListener('click', open);
