@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generate RSVP Links — Nabanita &amp; Nishant</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 2rem auto; max-width: 720px; padding: 0 1.5rem; font-family: system-ui, sans-serif; color: #2c2421; line-height: 1.6; }
+  h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
+  p.lead { color: #5c4d47; margin-top: 0; }
+  label { display: block; font-weight: 600; margin-bottom: 0.3rem; }
+  input, textarea { display: block; width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #ccc; border-radius: 6px; font: inherit; }
+  textarea { min-height: 160px; resize: vertical; }
+  small { color: #888; }
+  button { margin-top: 1rem; padding: 0.7rem 1.5rem; border: 0; border-radius: 6px; background: #7e2631; color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+  button:hover { background: #511b25; }
+  .output { margin-top: 1.5rem; }
+  .output table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .output th, .output td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid #eee; }
+  .output th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #7e2631; }
+  .output a { color: #7e2631; word-break: break-all; }
+  .copy-btn { padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-left: 0.5rem; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>Generate Personalised RSVP Links</h1>
+<p class="lead">Enter guest names (one per line) and the site URL. Each guest gets a unique link with their name prefilled.</p>
+
+<label for="base-url">Site URL</label>
+<input type="url" id="base-url" value="https://nabanita-nishant.github.io/wedding-invite-nn/" placeholder="https://nabanita-nishant.github.io/wedding-invite-nn/">
+
+<br><br>
+
+<label for="names">Guest names <small>(one per line)</small></label>
+<textarea id="names" placeholder="Rahul Kumar&#10;Priya Das&#10;The Sharma family"></textarea>
+
+<button onclick="generate()">Generate links</button>
+
+<div class="output" id="output"></div>
+
+<script>
+function generate() {
+  const base = document.getElementById('base-url').value.trim().replace(/\/$/, '');
+  const raw = document.getElementById('names').value.trim();
+  if (!base || !raw) return;
+  const names = raw.split('\n').map(n => n.trim()).filter(Boolean);
+
+  let html = '<table><thead><tr><th>Name</th><th>Personalised link</th><th></th></tr></thead><tbody>';
+  names.forEach(name => {
+    const url = base + '/?name=' + encodeURIComponent(name) + '#rsvp';
+    html += `<tr>
+      <td>${esc(name)}</td>
+      <td><a href="${esc(url)}" target="_blank">${esc(url)}</a></td>
+      <td><button class="copy-btn" onclick="copy(this, '${esc(url)}')">Copy</button></td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('output').innerHTML = html;
+}
+
+function copy(btn, url) {
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = 'Copied';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>

@@ -149,28 +149,7 @@ export const wedding = {
   },
   rsvp: {
     title: 'Will you celebrate with us?',
-    intro: "One reply per household is perfect. Tell us who is coming, which celebrations you'll join, and what each guest would like to eat.",
-    formUrl: '',
-    steps: [
-      {
-        title: 'One reply per household',
-        text: 'One person can reply for everyone in your household, with up to six guests in a single response.',
-      },
-      {
-        title: "Which celebrations you'll join",
-        text: 'Let us know which celebrations your household will be joining, so we can plan the food, seating, and arrangements.',
-        tags: ['Mehendi', 'Haldi', 'Ring exchange', 'Bengali wedding'],
-      },
-      {
-        title: 'A little something for everyone',
-        text: 'We will have both vegetarian and non-vegetarian options for our guests. Please choose one for each guest.',
-        tags: ['Vegetarian', 'Non-vegetarian'],
-      },
-      {
-        title: 'Allergies and preferences',
-        text: 'Please let us know if you have any food allergies, including nut allergies, dietary restrictions, intolerances, or ingredients you prefer to avoid. We will do our best to accommodate your needs.',
-      },
-    ] satisfies RsvpStep[],
+    maxPlusOnes: 5,
   },
   faq: {
     eyebrow: 'Good to know',

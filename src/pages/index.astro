@@ -5,7 +5,6 @@ import FloralMark from '../components/FloralMark.astro';
 import HeartIcon from '../components/HeartIcon.astro';
 import SectionLabel from '../components/SectionLabel.astro';
 import Toran from '../components/Toran.astro';
-import WelcomeSeal from '../components/WelcomeSeal.astro';
 import { wedding } from '../data/wedding';
 import '../styles/global.css';
 
@@ -15,16 +14,7 @@ const { couple } = wedding;
 const title = `${couple.firstName} & ${couple.secondName} | ${wedding.date}`;
 const description = `Join ${couple.firstName} and ${couple.secondName} for their wedding celebrations on ${wedding.date} in ${wedding.location}.`;
 
-const configuredFormUrl = String(import.meta.env.PUBLIC_GOOGLE_FORM_EMBED_URL || wedding.rsvp.formUrl || '').trim();
-const form = configuredFormUrl ? googleFormUrls(configuredFormUrl) : undefined;
-
-function googleFormUrls(value: string) {
-  const link = new URL(value);
-  link.searchParams.delete('embedded');
-  const embed = new URL(link);
-  embed.searchParams.set('embedded', 'true');
-  return { link: link.toString(), embed: embed.toString() };
-}
+const rsvpEndpoint = String(import.meta.env.PUBLIC_RSVP_ENDPOINT || '').trim();
 
 const navLinks = [
   { href: '#welcome', label: 'Welcome' },
@@ -179,10 +169,7 @@ const petals = [
             <SectionLabel eyebrow={wedding.welcome.eyebrow} />
             <h2 class="section-title" id="welcome-title">{wedding.welcome.title}</h2>
             <p class="section-lead">{wedding.welcome.copy}</p>
-            <div class="welcome__sign">
-              <p class="welcome__signoff">{wedding.welcome.signoff}</p>
-              <WelcomeSeal monogram="N&N" ringText="SCHOOLMATES · SOULMATES · SCHOOLMATES · SOULMATES · " />
-            </div>
+            <p class="welcome__signoff">{wedding.welcome.signoff}</p>
           </div>
           <div class="welcome-art reveal" aria-hidden="true">
             <div class="welcome-art__halo"></div>
@@ -236,57 +223,127 @@ const petals = [
       </section>
 
       <section class="rsvp" id="rsvp" aria-labelledby="rsvp-title">
-        <div class="container rsvp__grid">
+        <div class="container rsvp__center">
           <div class="rsvp__intro reveal">
             <SectionLabel eyebrow="RSVP" />
             <h2 class="section-title" id="rsvp-title">{wedding.rsvp.title}</h2>
-            <p class="section-lead">{wedding.rsvp.intro}</p>
           </div>
 
-          <div class="rsvp-card reveal">
+          <div class="rsvp-card reveal" data-rsvp-form data-endpoint={rsvpEndpoint}>
             <span class="rsvp-card__seal" aria-hidden="true">RSVP</span>
-            {form ? (
-              <div class="rsvp-card__body">
-                <p class="rsvp-card__eyebrow">Reply online</p>
-                <h3>Reply for your household</h3>
-                <p class="rsvp-card__text">The form opens in a new tab and works well on phones.</p>
-                <a class="button button--primary button--shine" href={form.link} target="_blank" rel="noopener noreferrer">
-                  Open the RSVP form<span class="sr-only"> (opens in a new tab)</span>
-                </a>
-                <div class="form-frame">
-                  <p class="rsvp-card__text">Or fill it in right here:</p>
-                  <iframe title="RSVP form" src={form.embed} loading="lazy">Loading the RSVP form…</iframe>
+
+            <div class="rsvp-step is-active" data-step="enter-name">
+              <h3>Let us know you are here</h3>
+              <div class="rsvp-field">
+                <label class="rsvp-label" for="rsvp-name-input">Your name</label>
+                <input type="text" id="rsvp-name-input" class="rsvp-input" required placeholder="Enter your full name" autocomplete="name" data-name-input>
+              </div>
+              <button type="button" class="button button--primary rsvp-btn-block" data-name-continue disabled>Continue</button>
+            </div>
+
+            <div class="rsvp-step" data-step="welcome">
+              <p class="rsvp-greeting">Dear <strong data-rsvp-name></strong>,</p>
+              <p class="rsvp-lead">You are warmly invited to our wedding celebrations.</p>
+              <h3>Will you be joining us?</h3>
+              <div class="rsvp-actions">
+                <button type="button" class="button button--primary" data-attend="yes">Joyfully accept</button>
+                <button type="button" class="button button--outline" data-attend="no">Regretfully decline</button>
+              </div>
+            </div>
+
+            <div class="rsvp-step" data-step="preferences">
+              <p class="rsvp-progress" data-progress></p>
+              <h3>Your preferences</h3>
+              <div class="rsvp-field">
+                <p class="rsvp-label">Food preference</p>
+                <div class="rsvp-chips">
+                  <button type="button" class="rsvp-chip" data-food="vegetarian">Vegetarian</button>
+                  <button type="button" class="rsvp-chip" data-food="non-vegetarian">Non-vegetarian</button>
                 </div>
               </div>
-            ) : (
-              <div class="rsvp-card__body">
-                <p class="rsvp-card__eyebrow">Opening soon</p>
-                <h3>Our RSVP form is almost ready.</h3>
-                <p class="rsvp-card__text">
-                  We are putting the final details together. Please check back here soon, or reach out to
-                  {` ${wedding.contact.name}`} if you have a question.
-                </p>
+              <div class="rsvp-field">
+                <p class="rsvp-label">Nut allergy?</p>
+                <div class="rsvp-chips">
+                  <button type="button" class="rsvp-chip" data-nut="yes">Yes</button>
+                  <button type="button" class="rsvp-chip" data-nut="no">No</button>
+                </div>
               </div>
-            )}
-          </div>
+              <button type="button" class="button button--primary rsvp-btn-block" data-pref-next disabled>Next</button>
+            </div>
 
-          <div class="rsvp__steps reveal">
-            <h3 class="rsvp__steps-title">What we will ask</h3>
-            <ol class="steps">
-              {wedding.rsvp.steps.map((step) => (
-                <li>
-                  <div>
-                    <h4>{step.title}</h4>
-                    <p>{step.text}</p>
-                    {step.tags && (
-                      <ul class="tags">
-                        {step.tags.map((tag) => <li>{tag}</li>)}
-                      </ul>
-                    )}
+            <div class="rsvp-step" data-step="plusone">
+              <h3>Bringing a guest?</h3>
+              <p class="rsvp-note">You can add up to 5 additional guests.</p>
+              <div class="rsvp-actions">
+                <button type="button" class="button button--primary" data-add-guest>Yes, add a guest</button>
+                <button type="button" class="button button--outline" data-skip-guests>No, that is everyone</button>
+              </div>
+            </div>
+
+            <template data-guest-tpl>
+              <div class="rsvp-step" data-step="guest">
+                <p class="rsvp-progress" data-guest-progress></p>
+                <h3>Guest <span data-guest-num></span></h3>
+                <div class="rsvp-field">
+                  <label class="rsvp-label" data-lbl>Name</label>
+                  <input type="text" class="rsvp-input" data-g-name required placeholder="Guest's full name" autocomplete="off">
+                </div>
+                <div class="rsvp-field">
+                  <p class="rsvp-label">Food preference</p>
+                  <div class="rsvp-chips">
+                    <button type="button" class="rsvp-chip" data-food="vegetarian">Vegetarian</button>
+                    <button type="button" class="rsvp-chip" data-food="non-vegetarian">Non-vegetarian</button>
                   </div>
-                </li>
-              ))}
-            </ol>
+                </div>
+                <div class="rsvp-field">
+                  <p class="rsvp-label">Nut allergy?</p>
+                  <div class="rsvp-chips">
+                    <button type="button" class="rsvp-chip" data-nut="yes">Yes</button>
+                    <button type="button" class="rsvp-chip" data-nut="no">No</button>
+                  </div>
+                </div>
+                <div class="rsvp-actions">
+                  <button type="button" class="button button--primary" data-save-add disabled>Add another guest</button>
+                  <button type="button" class="button button--outline" data-save-done disabled>That is everyone</button>
+                </div>
+              </div>
+            </template>
+
+            <div class="rsvp-step" data-step="review">
+              <h3>Review your RSVP</h3>
+              <div class="rsvp-summary" data-summary></div>
+              <div class="rsvp-actions">
+                <button type="button" class="button button--primary button--shine" data-submit>Confirm RSVP</button>
+              </div>
+            </div>
+
+            <div class="rsvp-step" data-step="submitting">
+              <p class="rsvp-loading">Sending your RSVP&hellip;</p>
+            </div>
+
+            <div class="rsvp-step" data-step="success">
+              <div class="rsvp-icon rsvp-icon--ok" aria-hidden="true">&#10003;</div>
+              <h3>Thank you!</h3>
+              <p>Your RSVP has been received. We cannot wait to celebrate with you!</p>
+            </div>
+
+            <div class="rsvp-step" data-step="decline">
+              <h3>We will miss you</h3>
+              <p>Thank you for letting us know. We hope to celebrate with you another time.</p>
+              <button type="button" class="button button--primary" data-submit-decline>Send response</button>
+            </div>
+
+            <div class="rsvp-step" data-step="decline-sent">
+              <div class="rsvp-icon" aria-hidden="true">&hearts;</div>
+              <h3>Response sent</h3>
+              <p>Thank you for letting us know.</p>
+            </div>
+
+            <div class="rsvp-step" data-step="error">
+              <h3>Something went wrong</h3>
+              <p>Please try again, or reach out to {wedding.contact.name} directly.</p>
+              <button type="button" class="button button--primary" data-retry>Try again</button>
+            </div>
           </div>
         </div>
       </section>
@@ -436,6 +493,171 @@ const petals = [
         });
       } else if (doors) {
         doors.remove();
+      }
+
+      // ── RSVP Form ──
+      const rsvpForm = document.querySelector<HTMLElement>('[data-rsvp-form]');
+      if (rsvpForm) {
+        const ENDPOINT = rsvpForm.dataset.endpoint || '';
+        const urlName = new URLSearchParams(window.location.search).get('name');
+        const MAX_PLUS = 5;
+
+        interface Guest { name: string; food: string; nutAllergy: string }
+        const state = { name: urlName || '', attending: true, guests: [] as Guest[] };
+
+        const show = (step: string) => {
+          rsvpForm.querySelectorAll<HTMLElement>('[data-step]').forEach((el) => {
+            const match = el.dataset.step === step;
+            el.hidden = !match;
+            el.classList.toggle('is-active', match);
+          });
+          rsvpForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        // Chip selection helper
+        rsvpForm.addEventListener('click', (e) => {
+          const chip = (e.target as HTMLElement).closest<HTMLElement>('.rsvp-chip');
+          if (!chip) return;
+          const group = chip.closest('.rsvp-chips');
+          group?.querySelectorAll('.rsvp-chip').forEach((c) => c.classList.remove('is-selected'));
+          chip.classList.add('is-selected');
+          // Enable next/save buttons in the same step
+          const step = chip.closest<HTMLElement>('.rsvp-step');
+          checkStepReady(step);
+        });
+
+        const checkStepReady = (step: HTMLElement | null) => {
+          if (!step) return;
+          const chips = step.querySelectorAll('.rsvp-chips');
+          const allSelected = Array.from(chips).every((g) => g.querySelector('.is-selected'));
+          const input = step.querySelector<HTMLInputElement>('.rsvp-input');
+          const nameOk = !input || input.value.trim().length > 0;
+          step.querySelectorAll<HTMLButtonElement>('[data-pref-next],[data-save-add],[data-save-done]').forEach((b) => {
+            b.disabled = !(allSelected && nameOk);
+          });
+        };
+
+        // Name input page
+        const nameInput = rsvpForm.querySelector<HTMLInputElement>('[data-name-input]');
+        const nameContinue = rsvpForm.querySelector<HTMLButtonElement>('[data-name-continue]');
+        nameInput?.addEventListener('input', () => {
+          if (nameContinue) nameContinue.disabled = !nameInput.value.trim();
+        });
+        nameContinue?.addEventListener('click', () => {
+          state.name = nameInput!.value.trim();
+          rsvpForm.querySelector<HTMLElement>('[data-rsvp-name]')!.textContent = state.name;
+          show('welcome');
+        });
+
+        // If name in URL, skip to welcome
+        if (urlName) {
+          rsvpForm.querySelector<HTMLElement>('[data-rsvp-name]')!.textContent = urlName;
+          show('welcome');
+        }
+
+        // Attend yes/no
+        rsvpForm.querySelector('[data-attend="yes"]')?.addEventListener('click', () => {
+          state.attending = true;
+          show('preferences');
+        });
+        rsvpForm.querySelector('[data-attend="no"]')?.addEventListener('click', () => {
+          state.attending = false;
+          show('decline');
+        });
+
+        // Preferences next
+        rsvpForm.querySelector('[data-pref-next]')?.addEventListener('click', () => {
+          const step = rsvpForm.querySelector<HTMLElement>('[data-step="preferences"]')!;
+          const food = step.querySelector('.rsvp-chips [data-food].is-selected') as HTMLElement;
+          const nut = step.querySelector('.rsvp-chips [data-nut].is-selected') as HTMLElement;
+          state.guests.push({ name: state.name, food: food.dataset.food!, nutAllergy: nut.dataset.nut! });
+          show('plusone');
+        });
+
+        // Add guest
+        rsvpForm.querySelector('[data-add-guest]')?.addEventListener('click', () => spawnGuestPage());
+        rsvpForm.querySelector('[data-skip-guests]')?.addEventListener('click', () => showReview());
+
+        const spawnGuestPage = () => {
+          if (state.guests.length >= MAX_PLUS + 1) { showReview(); return; }
+          const tpl = rsvpForm.querySelector<HTMLTemplateElement>('[data-guest-tpl]')!;
+          const frag = tpl.content.cloneNode(true) as DocumentFragment;
+          const step = frag.querySelector<HTMLElement>('.rsvp-step')!;
+          const num = state.guests.length + 1;
+          step.dataset.step = `guest-${num}`;
+          step.querySelector('[data-guest-num]')!.textContent = String(num);
+          step.querySelector('[data-guest-progress]')!.textContent = `Guest ${num} of up to ${MAX_PLUS + 1}`;
+          const lbl = step.querySelector('[data-lbl]') as HTMLLabelElement;
+          const inp = step.querySelector<HTMLInputElement>('[data-g-name]')!;
+          const id = `g-name-${num}`;
+          lbl.setAttribute('for', id);
+          inp.id = id;
+          inp.addEventListener('input', () => checkStepReady(step));
+
+          step.querySelector('[data-save-add]')?.addEventListener('click', () => {
+            saveGuest(step);
+            spawnGuestPage();
+          });
+          step.querySelector('[data-save-done]')?.addEventListener('click', () => {
+            saveGuest(step);
+            showReview();
+          });
+
+          // Hide add-another if at limit
+          if (state.guests.length >= MAX_PLUS) {
+            (step.querySelector('[data-save-add]') as HTMLElement).hidden = true;
+          }
+
+          rsvpForm.querySelector<HTMLTemplateElement>('[data-guest-tpl]')!.before(step);
+          show(`guest-${num}`);
+        };
+
+        const saveGuest = (step: HTMLElement) => {
+          const name = step.querySelector<HTMLInputElement>('[data-g-name]')!.value.trim();
+          const food = (step.querySelector('.rsvp-chips [data-food].is-selected') as HTMLElement).dataset.food!;
+          const nut = (step.querySelector('.rsvp-chips [data-nut].is-selected') as HTMLElement).dataset.nut!;
+          state.guests.push({ name, food, nutAllergy: nut });
+        };
+
+        const showReview = () => {
+          const summary = rsvpForm.querySelector('[data-summary]')!;
+          summary.innerHTML = state.guests.map((g, i) =>
+            `<div class="rsvp-summary__row">
+              <span class="rsvp-summary__name">${i === 0 ? g.name + ' (you)' : g.name}</span>
+              <span class="rsvp-summary__detail">${g.food === 'vegetarian' ? 'Veg' : 'Non-veg'}${g.nutAllergy === 'yes' ? ' · Nut allergy' : ''}</span>
+            </div>`
+          ).join('');
+          show('review');
+        };
+
+        // Submit
+        rsvpForm.querySelector('[data-submit]')?.addEventListener('click', () => submit(true));
+        rsvpForm.querySelector('[data-submit-decline]')?.addEventListener('click', () => submit(false));
+
+        const submit = async (attending: boolean) => {
+          show('submitting');
+          const payload = {
+            household: state.name,
+            attending,
+            guests: attending ? state.guests : [],
+            timestamp: new Date().toISOString(),
+          };
+          if (!ENDPOINT) { show(attending ? 'success' : 'decline-sent'); return; }
+          try {
+            await fetch(ENDPOINT, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain' },
+              body: JSON.stringify(payload),
+              mode: 'no-cors',
+            });
+            show(attending ? 'success' : 'decline-sent');
+          } catch {
+            show('error');
+          }
+        };
+
+        // Retry
+        rsvpForm.querySelector('[data-retry]')?.addEventListener('click', () => show('review'));
       }
     </script>
   </body>

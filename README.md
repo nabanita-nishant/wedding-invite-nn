@@ -7,9 +7,9 @@ The site is a static Astro project deployed to GitHub Pages. Wedding copy lives 
 ## Page structure
 
 1. Hero with a marigold toran, an arch around the couple's names, falling petals, the dates, an **RSVP now** button, and a countdown
-2. Welcome message with a rotating "schoolmates · soulmates" seal on phones
-3. Celebrations: a "Dress code at a glance" colour guide, then each day's venue and a timeline of events with time of day, dress code (what to wear and what to avoid), and an expandable description
-4. RSVP: the invitation-style RSVP card, what guests will be asked, and the food and allergy note
+2. Welcome message
+3. Celebrations: a mini December calendar with clickable dates, then each day's venue and a timeline of events with time of day, dress code (what to wear and what to avoid), and an expandable description
+4. RSVP: a custom multi-step form with personalised links, food preference, nut allergy, and +1 guest support
 5. Quick questions: the couple's answers about guests, RSVPs, dress code, and changes of plan
 6. Closing message with the contact for questions
 
@@ -22,39 +22,40 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Astro. The RSVP section shows an "opening soon" state until the Google Form URL is configured.
+Open the local URL printed by Astro. The RSVP form works in development mode without a backend: submissions show success but data is not sent anywhere.
 
-To preview the form locally:
+To connect the backend:
 
 1. Copy `.env.example` to `.env`.
-2. Set `PUBLIC_GOOGLE_FORM_EMBED_URL` to the full Google Form link, for example `https://docs.google.com/forms/d/e/<form-id>/viewform`. The embed link with `?embedded=true` also works. Short `forms.gle` links cannot be embedded.
+2. Set `PUBLIC_RSVP_ENDPOINT` to the Google Apps Script web app URL (see below).
 3. Run `npm run dev` again.
 
 Do not commit `.env`.
 
-When the form is configured, phones get an **Open the RSVP form** button that opens Google Forms in a new tab. Larger screens also show the form embedded on the page.
+## Set up the RSVP backend
 
-## Create the RSVP form
+The RSVP form submits to a Google Apps Script web app that writes responses to Google Sheets.
 
-`tools/create-rsvp-form.gs` builds the whole Google Form and its response spreadsheet in about a minute:
+1. Create a new Google Sheet in the Google account that should receive RSVPs.
+2. Open **Extensions > Apps Script**.
+3. Delete the sample code and paste in `tools/rsvp-backend.gs`.
+4. Click **Deploy > New deployment**. Choose **Web app**, set **Execute as** to **Me**, and **Who has access** to **Anyone**.
+5. Copy the deployment URL (ends with `/exec`).
+6. Set it as `PUBLIC_RSVP_ENDPOINT` in your `.env` file locally, or as a GitHub repository variable under **Settings > Secrets and variables > Actions > Variables**, then rebuild.
 
-1. Sign in to the Google account that should own the RSVPs and open https://script.google.com.
-2. Click **New project**, delete the sample code, and paste in the contents of `tools/create-rsvp-form.gs`.
-3. Click **Run** with `createWeddingRsvpForm` selected. Approve the permission prompt: choose your account, then **Advanced > Go to project (unsafe)**. The warning appears because the script is your own and not published by Google.
-4. Open **Execution log**. It prints the form link for the website, the link to edit the form, and the responses spreadsheet.
-5. Open the form once. If Google Forms shows a **Publish** button, click it and make sure responders are set to **Anyone with the link**. Do not turn on "Limit to 1 response": it forces guests to sign in to Google.
+The script creates two sheets automatically on first use:
+- **Households**: one row per submission (household name, attending yes/no, guest count, timestamp)
+- **Guests**: one row per attending guest (household, guest name, food preference, nut allergy, timestamp)
 
-The form asks, in order:
+## Personalised RSVP links
 
-1. Household or family name, your name, and optional phone and email
-2. Will your household be joining us? "Sorry, we can't make it" skips to the last section
-3. Which celebrations will your household join? (Friday Mehendi, Friday Haldi, Saturday ring exchange and lunch, Saturday Bengali wedding and dinner)
-4. Guest 1 to Guest 6, one section each: full name, vegetarian or non-vegetarian, nut allergy yes/no, and other allergies or ingredients to avoid. After each guest: "Is anyone else from your household coming?"
-5. Anything else you'd like us to know?
+Each guest gets a unique link with their name prefilled. Open `tools/generate-links.html` in a browser, enter the site URL and guest names (one per line), and it generates copyable links like:
 
-Each guest's answers land in their own spreadsheet columns, so meal counts and allergies are easy to share with the caterer.
+```
+https://nabanita-nishant.github.io/wedding-invite-nn/?name=Rahul+Kumar#rsvp
+```
 
-To connect the form to the website, put the form link in `rsvp.formUrl` in `src/data/wedding.ts` and push. Use the full `docs.google.com/forms/.../viewform` link, not a `forms.gle` short link. Alternatively, set the `PUBLIC_GOOGLE_FORM_EMBED_URL` repository variable; it takes priority over `rsvp.formUrl`.
+When a guest opens this link, the RSVP form greets them by name and skips the name-entry step. Links without the `?name=` parameter still work; the form asks for the name first.
 
 ## Content updates
 
@@ -67,14 +68,12 @@ Update `src/data/wedding.ts` for:
 - Contact information for Koyel or the wider family
 - Event copy or dress-code guidance, including the swatch colours
 - Quick questions (`faq.items`)
-- The RSVP form link (`rsvp.formUrl`)
-
-If the celebrations or the guest limit change, update `tools/create-rsvp-form.gs` to match before creating the form.
+If the celebrations or the guest limit change, update `tools/rsvp-backend.gs` to match.
 
 ## GitHub Pages deployment
 
 1. In the repository, open **Settings > Pages**. Under **Build and deployment**, set **Source** to **GitHub Actions**. This one-time switch is required: until it is set, the **Configure GitHub Pages** step fails with "Get Pages site failed". The workflow cannot turn Pages on by itself, because the default Actions token is not allowed to change repository settings.
-2. Optional: add a repository variable named `PUBLIC_GOOGLE_FORM_EMBED_URL` under **Settings > Secrets and variables > Actions > Variables** once the form is ready.
+2. Optional: add a repository variable named `PUBLIC_RSVP_ENDPOINT` under **Settings > Secrets and variables > Actions > Variables** once the Google Apps Script backend is deployed.
 3. Push to `main` or run the **Deploy wedding invite** workflow manually from the **Actions** tab.
 
 Do not add Google credentials, private spreadsheet IDs, or other secrets to the repository.

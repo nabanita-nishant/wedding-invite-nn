@@ -102,7 +102,7 @@ Use Astro with TypeScript and static output:
 - `src/pages/index.astro` owns page composition and page-level client behavior.
 - `src/styles/global.css` owns tokens, responsive layout, motion, and global element styles.
 - `public/` contains only static assets such as favicon files.
-- `PUBLIC_GOOGLE_FORM_EMBED_URL` controls whether the real Google Form iframe is rendered.
+- `PUBLIC_RSVP_ENDPOINT` points to the Google Apps Script web app that receives RSVP submissions.
 
 Do not use server-side rendering or Astro API routes. GitHub Pages cannot run them.
 
@@ -115,18 +115,20 @@ The current implementation includes:
 - `src/components/DaySchedule.astro` - one day: date, title, the venue card with its map button, and the event timeline.
 - `src/components/EventCard.astro` - one event: time of day (plus exact time when set), name, wear/avoid dress code with swatches, and a `<details>` description.
 - `src/components/SectionLabel.astro` and `src/components/FloralMark.astro` - editorial labels and decorative floral artwork (hidden from screen readers).
-- `src/components/DressCodeGuide.astro` - "Dress code at a glance" tiles (`#dress-code`) built from every event with a dress code; each tile links to its event card.
+- `src/components/DressCodeGuide.astro` - "Dress code at a glance" tiles built from every event with a dress code; each tile links to its event card (currently removed from the page but component exists).
 - `src/components/PartOfDayIcon.astro` - sunrise, sun, sunset, and moon icons for Morning, Afternoon, Evening, and Night.
 - `src/components/Faq.astro` and `src/components/HeartIcon.astro` - the Quick questions accordion (rich-text answers with links and bold text) and the heart icon.
-- `src/components/Toran.astro` and `src/components/WelcomeSeal.astro` - the marigold-and-mango-leaf garland under the header and the rotating "schoolmates · soulmates" seal shown beside the welcome sign-off on phones.
-- `src/data/wedding.ts` - typed content source of truth: `days[]` with `venue` and `events[]`, `dressCodeGuide`, `rsvp` (`formUrl`, `steps`), `faq`, `contact`, and `countdown`.
-- `tools/create-rsvp-form.gs` - Google Apps Script that creates the RSVP Google Form and its response spreadsheet.
+- `src/components/Toran.astro` - the marigold-and-mango-leaf garland under the header.
+- `src/data/wedding.ts` - typed content source of truth: `days[]` with `venue` and `events[]`, `rsvp` (`maxPlusOnes`), `faq`, `contact`, and `countdown`.
+- `tools/rsvp-backend.gs` - Google Apps Script web app that receives RSVP POST requests and writes to Google Sheets (Households + Guests tabs).
+- `tools/generate-links.html` - local HTML tool for generating personalised `?name=…#rsvp` links for each guest.
+- `tools/create-rsvp-form.gs` - (legacy) Google Apps Script that creates a Google Form; kept for reference.
 - `public/favicon.svg` - the N&N mark used as the favicon.
 - `.github/workflows/deploy.yml` - GitHub Pages build and deployment workflow.
 - `README.md` - local setup, Google Form field design, deployment, and URL options.
 - `AGENTS.md` - project rules for future agents and contributors, including guest-experience and dependency rules.
 
-The page renders an "opening soon" RSVP state until `PUBLIC_GOOGLE_FORM_EMBED_URL` is configured. When configured, it shows an "Open the RSVP form" button (new tab) on every screen and the embedded form only on screens wider than 820px. The variable accepts the normal viewform link or the embed link.
+The page contains a custom multi-step RSVP form. Personalised links use `?name=Guest+Name` to prefill the guest's name. The form posts to the Google Apps Script endpoint set via `PUBLIC_RSVP_ENDPOINT`. When the endpoint is not configured, the form shows success without sending data (development mode). The form supports the main guest plus up to 5 additional guests (+1s), each on their own page with name, food preference, and nut allergy fields.
 
 ## Guest experience decisions
 
