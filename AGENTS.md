@@ -23,7 +23,7 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 - Treat event access as open for now. Do not add invite restrictions or authentication.
 - The RSVP is one response per household, with the celebrations the household will join, plus individual guest names, food preferences, and allergy details.
 - The couple's Quick questions ask guests to check before bringing an additional guest and to give 7–10 days' notice of cancellations (at least 3–4 days when unexpected). Keep RSVP copy consistent with them.
-- Support up to six guests per household in the planned RSVP flow.
+- Support up to five guests per household: the named guest plus up to four additional guests.
 - Food choices are vegetarian and non-vegetarian.
 - Nut allergies, dietary restrictions, intolerances, and ingredients to avoid must remain clearly separated from food preference.
 - Use "Mehendi" and "Haldi" consistently.
@@ -58,7 +58,7 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 - `tools/generate-links.html` is a local-only tool for generating personalised `?name=…#rsvp` links for each guest.
 - Personalised links are not secret tokens. They prefill the name for convenience but do not restrict access.
 - Do not add Google credentials, spreadsheet IDs, private form tokens, or account secrets to source files.
-- The form supports up to 5 additional guests (+1s), each on their own page. Each guest provides name, food preference (veg/non-veg), and nut allergy (yes/no).
+- The form supports up to 4 additional guests, each on their own page. Each guest provides name, food preference (veg/non-veg), and nut allergy (yes/no).
 
 ## GitHub Pages rules
 

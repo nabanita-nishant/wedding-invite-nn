@@ -14,7 +14,7 @@ const { couple } = wedding;
 const title = `${couple.firstName} & ${couple.secondName} | ${wedding.date}`;
 const description = `Join ${couple.firstName} and ${couple.secondName} for their wedding celebrations on ${wedding.date} in ${wedding.location}.`;
 
-const rsvpEndpoint = String(import.meta.env.PUBLIC_RSVP_ENDPOINT || '').trim();
+const rsvpEndpoint = String(import.meta.env.PUBLIC_RSVP_ENDPOINT || wedding.rsvp.endpoint).trim();
 
 const navLinks = [
   { href: '#welcome', label: 'Welcome' },
@@ -229,7 +229,7 @@ const petals = [
             <h2 class="section-title" id="rsvp-title">{wedding.rsvp.title}</h2>
           </div>
 
-          <div class="rsvp-card reveal" data-rsvp-form data-endpoint={rsvpEndpoint}>
+          <div class="rsvp-card reveal" data-rsvp-form data-endpoint={rsvpEndpoint} data-max-plus-ones={wedding.rsvp.maxPlusOnes}>
             <span class="rsvp-card__seal" aria-hidden="true">RSVP</span>
 
             <div class="rsvp-step is-active" data-step="enter-name">
@@ -273,7 +273,7 @@ const petals = [
 
             <div class="rsvp-step" data-step="plusone">
               <h3>Bringing a guest?</h3>
-              <p class="rsvp-note">You can add up to 5 additional guests.</p>
+              <p class="rsvp-note">You can add up to {wedding.rsvp.maxPlusOnes} additional guests.</p>
               <div class="rsvp-actions">
                 <button type="button" class="button button--primary" data-add-guest>Yes, add a guest</button>
                 <button type="button" class="button button--outline" data-skip-guests>No, that is everyone</button>
@@ -500,7 +500,7 @@ const petals = [
       if (rsvpForm) {
         const ENDPOINT = rsvpForm.dataset.endpoint || '';
         const urlName = new URLSearchParams(window.location.search).get('name');
-        const MAX_PLUS = 5;
+        const MAX_PLUS = Number(rsvpForm.dataset.maxPlusOnes) || 4;
 
         interface Guest { name: string; food: string; nutAllergy: string }
         const state = { name: urlName || '', attending: true, guests: [] as Guest[] };

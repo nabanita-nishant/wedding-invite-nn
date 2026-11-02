@@ -22,13 +22,7 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Astro. The RSVP form works in development mode without a backend: submissions show success but data is not sent anywhere.
-
-To connect the backend:
-
-1. Copy `.env.example` to `.env`.
-2. Set `PUBLIC_RSVP_ENDPOINT` to the Google Apps Script web app URL (see below).
-3. Run `npm run dev` again.
+Open the local URL printed by Astro. The configured Google Apps Script endpoint is stored in `src/data/wedding.ts`. To test a different endpoint locally, copy `.env.example` to `.env`, set `PUBLIC_RSVP_ENDPOINT`, and restart `npm run dev`. The environment value overrides the configured endpoint.
 
 Do not commit `.env`.
 

@@ -22,7 +22,7 @@ Create a warm, elegant, modern Indian Hindu wedding invitation for:
 - Hosting: GitHub Pages
 - Core RSVP: Google Form embedded in the site
 - RSVP model: one household response with individual guest details
-- Maximum planned household size: six guests
+- Maximum household size: five guests (the named guest plus up to four additional guests)
 
 ## Visual direction
 
@@ -128,7 +128,7 @@ The current implementation includes:
 - `README.md` - local setup, Google Form field design, deployment, and URL options.
 - `AGENTS.md` - project rules for future agents and contributors, including guest-experience and dependency rules.
 
-The page contains a custom multi-step RSVP form. Personalised links use `?name=Guest+Name` to prefill the guest's name. The form posts to the Google Apps Script endpoint set via `PUBLIC_RSVP_ENDPOINT`. When the endpoint is not configured, the form shows success without sending data (development mode). The form supports the main guest plus up to 5 additional guests (+1s), each on their own page with name, food preference, and nut allergy fields.
+The page contains a custom multi-step RSVP form. Personalised links use `?name=Guest+Name` to prefill the guest's name. The form posts to the Google Apps Script endpoint in `wedding.rsvp.endpoint`, which `PUBLIC_RSVP_ENDPOINT` can override. The form supports the named guest plus up to 4 additional guests, each on their own page with name, food preference, and nut allergy fields.
 
 ## Guest experience decisions
 
@@ -152,19 +152,17 @@ Status: the repository was transferred to the free `nabanita-nishant` organizati
 
 ## RSVP implementation
 
-The first release uses a Google Form embed:
+The RSVP is a branded custom multi-step form:
 
-- Keep the surrounding RSVP section fully branded.
-- The form link comes from `PUBLIC_GOOGLE_FORM_EMBED_URL` if set, otherwise `rsvp.formUrl`. Show the honest "opening soon" state while both are empty.
-- Never claim a placeholder form submitted successfully.
-- The form collects household attendance, which celebrations the household will join (household-level checkboxes), and per-guest name, vegetarian/non-vegetarian choice, nut allergy status, and allergy or ingredient notes, for up to six guests.
-- Email and phone are optional.
+- `wedding.rsvp.endpoint` contains the deployed Google Apps Script URL; `PUBLIC_RSVP_ENDPOINT` can override it at build time.
+- Personalised links use `?name=Guest+Name#rsvp`; the name is a convenience prefill, not authentication.
+- The form collects attendance and per-guest name, vegetarian/non-vegetarian choice, and nut allergy status for the named guest plus up to four additional guests.
+- Each additional guest has a separate form step.
 - There is no RSVP deadline yet.
-- Do not restrict who can choose which celebration yet.
 
-`tools/create-rsvp-form.gs` builds the form: after each guest section, "Is anyone else from your household coming?" either opens the next guest section or jumps to the final section, which avoids one branch path per household size.
+`tools/rsvp-backend.gs` receives submissions and creates/updates `Households` and `Guests` tabs in its bound Google Sheet. `tools/generate-links.html` is a local link-generation utility and is not included in the Astro deployment.
 
-Status: the form has not been created yet. The couple (or Debasmita) must run the script in the Google account that should own the responses and send back the `docs.google.com/forms/.../viewform` link; then set `rsvp.formUrl`, build, and push.
+Status: an Apps Script endpoint is configured, but it must be deployed with access set to **Anyone**. If an unauthenticated GET redirects to Google sign-in, guests cannot use it yet.
 
 ## GitHub Pages deployment
 

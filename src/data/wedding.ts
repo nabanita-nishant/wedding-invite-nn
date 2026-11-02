@@ -149,7 +149,8 @@ export const wedding = {
   },
   rsvp: {
     title: 'Will you celebrate with us?',
-    maxPlusOnes: 5,
+    endpoint: 'https://script.google.com/macros/s/AKfycbzmkPExhXn3pwNmMB9FPcdGsx3UJV0B47ohisCuyTPo0hq95xVXpIu04Bn-5szTNtNs/exec',
+    maxPlusOnes: 4,
   },
   faq: {
     eyebrow: 'Good to know',
