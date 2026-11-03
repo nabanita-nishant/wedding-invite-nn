@@ -21,7 +21,7 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 - Preserve the couple's meaning when polishing grammar and spelling.
 - Keep the tone warm, intimate, elegant, and culturally respectful.
 - Treat event access as open for now. Do not add invite restrictions or authentication.
-- The RSVP is one response per household, with the celebrations the household will join, plus individual guest names, food preferences, and allergy details.
+- The RSVP is one response per household, with the celebrations the household will join, plus individual guest names, food preferences, and allergy details (including a description field when "yes" is selected).
 - The couple's Quick questions ask guests to check before bringing an additional guest and to give 7–10 days' notice of cancellations (at least 3–4 days when unexpected). Keep RSVP copy consistent with them.
 - Support up to five guests per household: the named guest plus up to four additional guests.
 - Food choices are vegetarian and non-vegetarian.

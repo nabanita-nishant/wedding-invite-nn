@@ -15,7 +15,7 @@
  *
  * The script creates two sheets on first use:
  *   Households  — one row per submission (name, attending, guest count, timestamp)
- *   Guests      — one row per attending guest (household, name, food, nut allergy)
+ *   Guests      — one row per attending guest (household, name, food, allergy, allergy description)
  */
 
 function doPost(e) {
@@ -42,7 +42,7 @@ function doPost(e) {
       var guests = ss.getSheetByName('Guests');
       if (!guests) {
         guests = ss.insertSheet('Guests');
-        guests.appendRow(['Household', 'Guest name', 'Food preference', 'Nut allergy', 'Timestamp']);
+        guests.appendRow(['Household', 'Guest name', 'Food preference', 'Allergy', 'Allergy description', 'Timestamp']);
         guests.getRange('1:1').setFontWeight('bold');
       }
       var ts = data.timestamp || new Date().toISOString();
@@ -51,7 +51,8 @@ function doPost(e) {
           data.household || '',
           g.name || '',
           g.food || '',
-          g.nutAllergy === 'yes' ? 'Yes' : 'No',
+          g.allergy === 'yes' ? 'Yes' : 'No',
+          g.allergyDesc || '',
           ts,
         ]);
       });

@@ -274,11 +274,12 @@ const petals = [
                 </div>
               </div>
               <div class="rsvp-field">
-                <p class="rsvp-label">Nut allergy?</p>
+                <p class="rsvp-label">Any allergy?</p>
                 <div class="rsvp-chips">
-                  <button type="button" class="rsvp-chip" data-nut="yes">Yes</button>
-                  <button type="button" class="rsvp-chip" data-nut="no">No</button>
+                  <button type="button" class="rsvp-chip" data-allergy="yes">Yes</button>
+                  <button type="button" class="rsvp-chip" data-allergy="no">No</button>
                 </div>
+                <textarea class="rsvp-textarea rsvp-textarea--hidden" data-allergy-desc placeholder="Please describe your allergy (e.g., nuts, dairy, gluten)" rows="2"></textarea>
               </div>
               <button type="button" class="button button--primary rsvp-btn-block" data-pref-next disabled>Next</button>
             </div>
@@ -308,11 +309,12 @@ const petals = [
                   </div>
                 </div>
                 <div class="rsvp-field">
-                  <p class="rsvp-label">Nut allergy?</p>
+                  <p class="rsvp-label">Any allergy?</p>
                   <div class="rsvp-chips">
-                    <button type="button" class="rsvp-chip" data-nut="yes">Yes</button>
-                    <button type="button" class="rsvp-chip" data-nut="no">No</button>
+                    <button type="button" class="rsvp-chip" data-allergy="yes">Yes</button>
+                    <button type="button" class="rsvp-chip" data-allergy="no">No</button>
                   </div>
+                  <textarea class="rsvp-textarea rsvp-textarea--hidden" data-allergy-desc placeholder="Please describe your allergy (e.g., nuts, dairy, gluten)" rows="2"></textarea>
                 </div>
                 <div class="rsvp-actions">
                   <button type="button" class="button button--primary" data-save-add disabled>Add another guest</button>
@@ -569,7 +571,7 @@ const petals = [
         const urlName = new URLSearchParams(window.location.search).get('name');
         const MAX_PLUS = Number(rsvpForm.dataset.maxPlusOnes) || 4;
 
-        interface Guest { name: string; food: string; nutAllergy: string }
+        interface Guest { name: string; food: string; allergy: string; allergyDesc?: string }
         const state = { name: urlName || '', attending: true, guests: [] as Guest[] };
 
         const show = (step: string) => {
@@ -588,6 +590,16 @@ const petals = [
           const group = chip.closest('.rsvp-chips');
           group?.querySelectorAll('.rsvp-chip').forEach((c) => c.classList.remove('is-selected'));
           chip.classList.add('is-selected');
+
+          // Show/hide allergy description textarea
+          if (chip.dataset.allergy) {
+            const textarea = group?.nextElementSibling as HTMLTextAreaElement;
+            if (textarea?.classList.contains('rsvp-textarea')) {
+              textarea.classList.toggle('rsvp-textarea--hidden', chip.dataset.allergy === 'no');
+              if (chip.dataset.allergy === 'yes') textarea.focus();
+            }
+          }
+
           // Enable next/save buttons in the same step
           const step = chip.closest<HTMLElement>('.rsvp-step');
           checkStepReady(step);
@@ -599,8 +611,11 @@ const petals = [
           const allSelected = Array.from(chips).every((g) => g.querySelector('.is-selected'));
           const input = step.querySelector<HTMLInputElement>('.rsvp-input');
           const nameOk = !input || input.value.trim().length > 0;
+          const allergyYes = step.querySelector('.rsvp-chip[data-allergy="yes"].is-selected');
+          const allergyDesc = step.querySelector<HTMLTextAreaElement>('.rsvp-textarea');
+          const allergyDescOk = !allergyYes || (allergyDesc && allergyDesc.value.trim().length > 0);
           step.querySelectorAll<HTMLButtonElement>('[data-pref-next],[data-save-add],[data-save-done]').forEach((b) => {
-            b.disabled = !(allSelected && nameOk);
+            b.disabled = !(allSelected && nameOk && allergyDescOk);
           });
         };
 
@@ -622,6 +637,12 @@ const petals = [
           show('welcome');
         }
 
+        // Add textarea input listener for preferences step
+        rsvpForm.querySelector<HTMLTextAreaElement>('[data-step="preferences"] .rsvp-textarea')?.addEventListener('input', (e) => {
+          const step = (e.target as HTMLElement).closest<HTMLElement>('.rsvp-step');
+          checkStepReady(step);
+        });
+
         // Attend yes/no
         rsvpForm.querySelector('[data-attend="yes"]')?.addEventListener('click', () => {
           state.attending = true;
@@ -636,8 +657,9 @@ const petals = [
         rsvpForm.querySelector('[data-pref-next]')?.addEventListener('click', () => {
           const step = rsvpForm.querySelector<HTMLElement>('[data-step="preferences"]')!;
           const food = step.querySelector('.rsvp-chips [data-food].is-selected') as HTMLElement;
-          const nut = step.querySelector('.rsvp-chips [data-nut].is-selected') as HTMLElement;
-          state.guests.push({ name: state.name, food: food.dataset.food!, nutAllergy: nut.dataset.nut! });
+          const allergy = step.querySelector('.rsvp-chips [data-allergy].is-selected') as HTMLElement;
+          const allergyDesc = step.querySelector<HTMLTextAreaElement>('.rsvp-textarea')?.value.trim() || '';
+          state.guests.push({ name: state.name, food: food.dataset.food!, allergy: allergy.dataset.allergy!, allergyDesc });
           show('plusone');
         });
 
@@ -660,6 +682,7 @@ const petals = [
           lbl.setAttribute('for', id);
           inp.id = id;
           inp.addEventListener('input', () => checkStepReady(step));
+          step.querySelector<HTMLTextAreaElement>('.rsvp-textarea')?.addEventListener('input', () => checkStepReady(step));
 
           step.querySelector('[data-save-add]')?.addEventListener('click', () => {
             saveGuest(step);
@@ -682,8 +705,9 @@ const petals = [
         const saveGuest = (step: HTMLElement) => {
           const name = step.querySelector<HTMLInputElement>('[data-g-name]')!.value.trim();
           const food = (step.querySelector('.rsvp-chips [data-food].is-selected') as HTMLElement).dataset.food!;
-          const nut = (step.querySelector('.rsvp-chips [data-nut].is-selected') as HTMLElement).dataset.nut!;
-          state.guests.push({ name, food, nutAllergy: nut });
+          const allergy = (step.querySelector('.rsvp-chips [data-allergy].is-selected') as HTMLElement).dataset.allergy!;
+          const allergyDesc = step.querySelector<HTMLTextAreaElement>('.rsvp-textarea')?.value.trim() || '';
+          state.guests.push({ name, food, allergy, allergyDesc });
         };
 
         const showReview = () => {
@@ -691,7 +715,7 @@ const petals = [
           summary.innerHTML = state.guests.map((g, i) =>
             `<div class="rsvp-summary__row">
               <span class="rsvp-summary__name">${i === 0 ? g.name + ' (you)' : g.name}</span>
-              <span class="rsvp-summary__detail">${g.food === 'vegetarian' ? 'Veg' : 'Non-veg'}${g.nutAllergy === 'yes' ? ' · Nut allergy' : ''}</span>
+              <span class="rsvp-summary__detail">${g.food === 'vegetarian' ? 'Veg' : 'Non-veg'}${g.allergy === 'yes' ? ' · ' + (g.allergyDesc || 'Allergy') : ''}</span>
             </div>`
           ).join('');
           show('review');

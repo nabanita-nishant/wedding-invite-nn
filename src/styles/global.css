@@ -1460,6 +1460,35 @@ a.mini-cal__hl:hover {
   color: rgba(92, 77, 71, 0.5);
 }
 
+.rsvp-textarea {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  transition: border-color 180ms ease;
+  margin-top: 0.5rem;
+  resize: vertical;
+}
+
+.rsvp-textarea:focus {
+  border-color: var(--maroon);
+  outline: none;
+}
+
+.rsvp-textarea::placeholder {
+  color: rgba(92, 77, 71, 0.5);
+}
+
+.rsvp-textarea--hidden {
+  display: none;
+}
+
 .rsvp-chips {
   display: flex;
   flex-wrap: wrap;

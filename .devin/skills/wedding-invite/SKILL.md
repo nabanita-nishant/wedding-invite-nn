@@ -156,7 +156,7 @@ The RSVP is a branded custom multi-step form:
 
 - `wedding.rsvp.endpoint` contains the deployed Google Apps Script URL; `PUBLIC_RSVP_ENDPOINT` can override it at build time.
 - Personalised links use `?name=Guest+Name`; the name is a convenience prefill, not authentication.
-- The form collects attendance and per-guest name, vegetarian/non-vegetarian choice, and nut allergy status for the named guest plus up to four additional guests.
+- The form collects attendance and per-guest name, vegetarian/non-vegetarian choice, and allergy status (with a description field when "yes" is selected) for the named guest plus up to four additional guests.
 - Each additional guest has a separate form step.
 - There is no RSVP deadline yet.
 
