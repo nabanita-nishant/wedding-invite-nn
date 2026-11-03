@@ -9,7 +9,7 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 - Keep wedding copy, dates, venues, map links, event descriptions, dress codes, RSVP config, food copy, Quick questions, and contact copy in `src/data/wedding.ts`.
 - `tools/rsvp-backend.gs` is the Google Apps Script that receives RSVP submissions and writes to Google Sheets. Keep its sheet structure in sync with the form payload.
 - `tools/generate-links.html` generates personalised RSVP links with guest names prefilled via URL parameters.
-- Venues belong to a day (`days[].venue`), not to individual events. Show each venue once per day.
+- Venues belong to a day (`days[].venue`), not to individual events. Show both venues only in the Locations section after Quick questions; do not duplicate venue cards inside each day schedule.
 - Do not duplicate event facts in components or styles.
 - Times are intentionally omitted until the couple provides them. Do not invent times.
 - The Saturday venue is De' Aloha Resort. Its exact Google Maps coordinates and link are stored in `days[1].venue`; do not replace them with an invented address.

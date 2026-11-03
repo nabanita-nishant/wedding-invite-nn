@@ -1013,44 +1013,6 @@ a.mini-cal__hl:hover {
   line-height: 1.05;
 }
 
-.venue {
-  padding: 1.25rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--paper);
-}
-
-.venue p {
-  margin: 0;
-}
-
-.venue p + p {
-  margin-top: 0.3rem;
-}
-
-.venue__label {
-  color: var(--gold-text);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.venue__name {
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.venue__address {
-  color: var(--ink-soft);
-  font-size: 0.9375rem;
-}
-
-.venue .button {
-  margin-top: 1rem;
-}
-
 .timeline {
   position: relative;
   display: grid;
@@ -1073,17 +1035,37 @@ a.mini-cal__hl:hover {
 .timeline[data-scroll-track]::after {
   position: absolute;
   z-index: 2;
-  top: 0.1rem;
-  left: 0;
-  width: 0.85rem;
-  height: 0.85rem;
-  border: 2px solid var(--gold);
+  top: 0;
+  left: -0.35rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
   content: '';
-  background: var(--maroon);
-  box-shadow: 0 0 0 4px var(--ivory), 0 4px 12px rgba(81, 27, 37, 0.22);
+  box-shadow: 0 0 0 3px var(--ivory), 0 4px 12px rgba(81, 27, 37, 0.22);
   transform: translateY(var(--timeline-marker-y, 0));
   will-change: transform;
+}
+
+.timeline[data-day='friday'][data-scroll-track]::after {
+  background:
+    radial-gradient(circle at 50% 50%, var(--gold-light) 0 13%, transparent 14%),
+    radial-gradient(ellipse at 50% 15%, #e9879f 0 20%, transparent 21%),
+    radial-gradient(ellipse at 85% 50%, #c8467a 0 20%, transparent 21%),
+    radial-gradient(ellipse at 50% 85%, #e9879f 0 20%, transparent 21%),
+    radial-gradient(ellipse at 15% 50%, #f7c6d0 0 20%, transparent 21%),
+    radial-gradient(ellipse at 26% 26%, #e9879f 0 18%, transparent 19%),
+    radial-gradient(ellipse at 74% 26%, #f7c6d0 0 18%, transparent 19%),
+    radial-gradient(ellipse at 74% 74%, #e9879f 0 18%, transparent 19%),
+    radial-gradient(ellipse at 26% 74%, #c8467a 0 18%, transparent 19%);
+}
+
+.timeline[data-day='saturday'][data-scroll-track]::after {
+  left: -0.5rem;
+  width: 1.8rem;
+  background:
+    radial-gradient(circle at 35% 50%, transparent 0 27%, var(--gold) 28% 37%, transparent 38%),
+    radial-gradient(circle at 65% 50%, transparent 0 27%, var(--maroon) 28% 37%, transparent 38%);
+  box-shadow: 0 0 0 3px var(--ivory), 0 4px 12px rgba(81, 27, 37, 0.22);
 }
 
 .timeline__item {
@@ -1918,19 +1900,6 @@ a.mini-cal__hl:hover {
   --swatch-delay: 210ms;
 }
 
-.venue__map {
-  gap: 0.45rem;
-}
-
-.venue__pin {
-  flex: none;
-  width: 1.05rem;
-  height: 1.05rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-}
-
 .dress-guide {
   margin-bottom: clamp(2rem, 4vw, 3rem);
   padding: clamp(1.25rem, 3vw, 1.75rem);
@@ -2683,10 +2652,6 @@ a.mini-cal__hl:hover {
 
   .look {
     padding: 0.85rem;
-  }
-
-  .venue__map {
-    width: 100%;
   }
 
   .faq__item summary {

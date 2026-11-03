@@ -8,7 +8,7 @@ The site is a static Astro project deployed to GitHub Pages. Wedding copy lives 
 
 1. Hero with a marigold toran, an arch around the couple's names, falling petals, the dates, an **RSVP now** button, and a countdown
 2. Welcome message
-3. Celebrations: a mini December calendar with clickable dates, then each day's venue and a timeline of events with time of day, dress code (what to wear and what to avoid), and an expandable description
+3. Celebrations: a mini December calendar with clickable dates, then each day's timeline of events with time of day, dress code (what to wear and what to avoid), an expandable description, and day-specific scroll markers
 4. RSVP: a custom multi-step form with personalised links, food preference, nut allergy, and +1 guest support
 5. Quick questions: the couple's answers about guests, RSVPs, dress code, and changes of plan
 6. Locations: embedded Google Maps for both venues with live-directions buttons
