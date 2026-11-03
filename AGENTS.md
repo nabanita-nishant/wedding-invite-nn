@@ -55,7 +55,7 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 - The RSVP is a custom multi-step form built into the page. It reads the guest name from the `?name=` URL parameter and prefills it. If no name is in the URL, the form asks for the guest's name first.
 - The form submits to a Google Apps Script web app whose URL is set via `PUBLIC_RSVP_ENDPOINT`. When the endpoint is not configured, the form shows success without sending data (development mode).
 - `tools/rsvp-backend.gs` is the Google Apps Script that receives POST requests and writes to a Google Sheet with Households and Guests tabs.
-- `tools/generate-links.html` is a local-only tool for generating personalised `?name=…#rsvp` links for each guest.
+- `tools/generate-links.html` is a local-only tool for generating personalised `?name=…` links for each guest.
 - Personalised links are not secret tokens. They prefill the name for convenience but do not restrict access.
 - Do not add Google credentials, spreadsheet IDs, private form tokens, or account secrets to source files.
 - The form supports up to 4 additional guests, each on their own page. Each guest provides name, food preference (veg/non-veg), and nut allergy (yes/no).

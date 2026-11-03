@@ -48,7 +48,7 @@ function generate() {
 
   let html = '<table><thead><tr><th>Name</th><th>Personalised link</th><th></th></tr></thead><tbody>';
   names.forEach(name => {
-    const url = base + '/?name=' + encodeURIComponent(name) + '#rsvp';
+    const url = base + '/?name=' + encodeURIComponent(name);
     html += `<tr>
       <td>${esc(name)}</td>
       <td><a href="${esc(url)}" target="_blank">${esc(url)}</a></td>

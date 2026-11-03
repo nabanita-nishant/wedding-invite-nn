@@ -121,7 +121,7 @@ The current implementation includes:
 - `src/components/Toran.astro` - the marigold-and-mango-leaf garland under the header.
 - `src/data/wedding.ts` - typed content source of truth: `days[]` with `venue` and `events[]`, `rsvp` (`maxPlusOnes`), `faq`, `contact`, and `countdown`.
 - `tools/rsvp-backend.gs` - Google Apps Script web app that receives RSVP POST requests and writes to Google Sheets (Households + Guests tabs).
-- `tools/generate-links.html` - local HTML tool for generating personalised `?name=…#rsvp` links for each guest.
+- `tools/generate-links.html` - local HTML tool for generating personalised `?name=…` links for each guest.
 - `tools/create-rsvp-form.gs` - (legacy) Google Apps Script that creates a Google Form; kept for reference.
 - `public/favicon.svg` - the N&N mark used as the favicon.
 - `.github/workflows/deploy.yml` - GitHub Pages build and deployment workflow.
@@ -155,7 +155,7 @@ Status: the repository was transferred to the free `nabanita-nishant` organizati
 The RSVP is a branded custom multi-step form:
 
 - `wedding.rsvp.endpoint` contains the deployed Google Apps Script URL; `PUBLIC_RSVP_ENDPOINT` can override it at build time.
-- Personalised links use `?name=Guest+Name#rsvp`; the name is a convenience prefill, not authentication.
+- Personalised links use `?name=Guest+Name`; the name is a convenience prefill, not authentication.
 - The form collects attendance and per-guest name, vegetarian/non-vegetarian choice, and nut allergy status for the named guest plus up to four additional guests.
 - Each additional guest has a separate form step.
 - There is no RSVP deadline yet.
