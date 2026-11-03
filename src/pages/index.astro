@@ -217,7 +217,10 @@ const petals = [
 
           <div class="celebrations__cta reveal">
             <p>Ready to let us know if you can make it?</p>
-            <a class="button button--light" href="#rsvp">RSVP now</a>
+            <div class="celebrations__cta-actions">
+              <a class="button button--ghost" href="#locations">Get the locations — view here</a>
+              <a class="button button--light" href="#rsvp">RSVP now</a>
+            </div>
           </div>
         </div>
       </section>
@@ -360,6 +363,39 @@ const petals = [
         </div>
       </section>
 
+      <section class="locations" id="locations" aria-labelledby="locations-title">
+        <div class="container">
+          <div class="locations__intro reveal">
+            <SectionLabel eyebrow="Find your way" />
+            <h2 class="section-title" id="locations-title">Celebration locations</h2>
+            <p class="section-lead">Both venues are marked below. Open either location in Google Maps for live directions.</p>
+          </div>
+          <div class="locations__grid">
+            {wedding.days.map((day) => (
+              <article class="location-card reveal">
+                <div class="location-card__map">
+                  <iframe
+                    src={day.venue.embedUrl}
+                    title={`${day.weekday} venue map — ${day.venue.name ?? day.venue.address}`}
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+                <div class="location-card__body">
+                  <p class="location-card__day">{day.weekday} · {day.shortDate}</p>
+                  {day.venue.name && <h3>{day.venue.name}</h3>}
+                  {day.venue.address && <p>{day.venue.address}</p>}
+                  <a class="button button--primary button--compact" href={day.venue.mapUrl} target="_blank" rel="noopener noreferrer">
+                    Get directions<span class="sr-only"> to the {day.weekday} venue (opens in a new tab)</span>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section class="closing" id="contact" aria-labelledby="closing-title">
         <span class="closing__scallop" aria-hidden="true"></span>
         <div class="closing__pattern" aria-hidden="true"></div>
@@ -469,6 +505,28 @@ const petals = [
         });
 
         root.setAttribute('data-reveal-ready', '');
+      }
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const timelines = Array.from(document.querySelectorAll<HTMLElement>('.timeline'));
+        timelines.forEach((timeline) => timeline.setAttribute('data-scroll-track', ''));
+        let timelineFrame = 0;
+        const updateTimelineMarkers = () => {
+          timelineFrame = 0;
+          const focus = window.innerHeight * 0.55;
+          timelines.forEach((timeline) => {
+            const rect = timeline.getBoundingClientRect();
+            const progress = Math.min(1, Math.max(0, (focus - rect.top) / rect.height));
+            const distance = Math.max(0, timeline.clientHeight - 16);
+            timeline.style.setProperty('--timeline-marker-y', `${progress * distance}px`);
+          });
+        };
+        const requestTimelineUpdate = () => {
+          if (!timelineFrame) timelineFrame = requestAnimationFrame(updateTimelineMarkers);
+        };
+        window.addEventListener('scroll', requestTimelineUpdate, { passive: true });
+        window.addEventListener('resize', requestTimelineUpdate);
+        updateTimelineMarkers();
       }
 
       const doors = document.querySelector<HTMLElement>('[data-doors]');

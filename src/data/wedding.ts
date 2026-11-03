@@ -19,6 +19,7 @@ export type Venue = {
   name?: string;
   address?: string;
   mapUrl: string;
+  embedUrl: string;
 };
 
 export type WeddingDay = {
@@ -76,6 +77,7 @@ export const wedding = {
         name: "The bride's residence",
         address: 'Shreebhumi Enclave, Tiger Hill Road, Lalmati, Tezpur, Assam',
         mapUrl: 'https://maps.app.goo.gl/7Q8EdLYiVf6ajSXP8',
+        embedUrl: 'https://www.google.com/maps?q=26.6230139,92.7841289&z=16&output=embed',
       },
       events: [
         {
@@ -109,7 +111,10 @@ export const wedding = {
       shortDate: '5 Dec',
       title: 'Rings, rituals & forever',
       venue: {
+        name: "De' Aloha Resort",
+        address: 'Tezpur, Assam',
         mapUrl: 'https://maps.app.goo.gl/whE3vhVsqQGJEjyeA',
+        embedUrl: 'https://www.google.com/maps?q=26.619053,92.7605684&z=16&output=embed',
       },
       events: [
         {
@@ -193,7 +198,7 @@ export const wedding = {
     outro: "We're so excited to celebrate these special moments with you and make beautiful memories together!",
   },
   contact: {
-    name: 'Koyel',
-    message: 'For any questions, please reach out to Koyel.',
+    name: 'Nabanita & Nishant',
+    message: 'For any questions, please reach out to Nabanita & Nishant.',
   },
 };

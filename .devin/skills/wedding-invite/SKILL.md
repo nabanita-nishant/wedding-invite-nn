@@ -82,7 +82,7 @@ Food copy:
 
 Contact copy:
 
-`For any questions, please reach out to Koyel.`
+`For any questions, please reach out to Nabanita & Nishant.`
 
 Quick questions (from the couple, stored in `faq.items`):
 
@@ -110,8 +110,8 @@ Do not use server-side rendering or Astro API routes. GitHub Pages cannot run th
 
 The current implementation includes:
 
-- `src/pages/index.astro` - page composition (Hero, Welcome, Celebrations, RSVP, Closing), fixed header with an always-visible RSVP button, mobile menu, day-based countdown, desktop-open event details, and the RSVP form state.
-- `src/styles/global.css` - Heritage Modern tokens, accessible contrast tokens (`--gold-text`), responsive layout, timeline, dress-code swatches, buttons, CSS-only scroll animations, focus states, and reduced-motion rules.
+- `src/pages/index.astro` - page composition (Hero, Welcome, Celebrations, RSVP, Quick questions, Locations, Closing), fixed header with an always-visible RSVP button, mobile menu, day-based countdown, desktop-open event details, embedded maps, scroll-following timeline markers, and the RSVP form state.
+- `src/styles/global.css` - Heritage Modern tokens, accessible contrast tokens (`--gold-text`), responsive layout, timeline and moving marker, location cards, dress-code swatches, buttons, CSS-only scroll animations, focus states, and reduced-motion rules.
 - `src/components/DaySchedule.astro` - one day: date, title, the venue card with its map button, and the event timeline.
 - `src/components/EventCard.astro` - one event: time of day (plus exact time when set), name, wear/avoid dress code with swatches, and a `<details>` description.
 - `src/components/SectionLabel.astro` and `src/components/FloralMark.astro` - editorial labels and decorative floral artwork (hidden from screen readers).

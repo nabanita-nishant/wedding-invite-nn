@@ -1,6 +1,6 @@
 const COUPLE = 'Nabanita & Nishant';
 const DATES = '4–5 December 2026';
-const CONTACT = 'Koyel';
+const CONTACT = 'Nabanita & Nishant';
 const MAX_GUESTS = 6;
 const CELEBRATIONS = [
   'Friday morning · Mehendi ceremony',

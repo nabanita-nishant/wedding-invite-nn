@@ -12,7 +12,7 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 - Venues belong to a day (`days[].venue`), not to individual events. Show each venue once per day.
 - Do not duplicate event facts in components or styles.
 - Times are intentionally omitted until the couple provides them. Do not invent times.
-- The Saturday venue currently has only a map link. Do not invent a Saturday venue name or street address.
+- The Saturday venue is De' Aloha Resort. Its exact Google Maps coordinates and link are stored in `days[1].venue`; do not replace them with an invented address.
 - The RSVP deadline and family names are intentionally not published yet.
 
 ## Content rules
@@ -40,7 +40,7 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 ## Guest experience rules
 
 - RSVP must always be one tap away: keep the RSVP button in the fixed header at every screen width, the "RSVP now" button in the hero, the RSVP prompt after the schedule, and the closing RSVP button.
-- Keep the section order Hero, Welcome, Celebrations, RSVP, Quick questions (`#questions`), Closing. Do not add sections between Celebrations and RSVP without a clear guest need.
+- Keep the section order Hero, Welcome, Celebrations, RSVP, Quick questions (`#questions`), Locations (`#locations`), Closing. Do not add sections between Celebrations and RSVP without a clear guest need.
 - Event cards must show time of day, name, and dress code (wear and avoid) without interaction. Only the longer description sits in the `<details>` disclosure, which opens by default on screens wider than 820px.
 - Most guests use phones. Design and review every change at 390px and 360px first.
 - Content must never depend on JavaScript to become visible. An inline script in `<head>` adds `reveal-on` only when IntersectionObserver exists and reduced motion is off; the page script then reveals `.reveal` elements as they scroll into view. If that script has not run within 1.5s of `load`, the inline script removes `reveal-on` so everything shows.

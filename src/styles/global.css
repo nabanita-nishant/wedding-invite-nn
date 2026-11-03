@@ -1070,6 +1070,22 @@ a.mini-cal__hl:hover {
   background: linear-gradient(var(--gold), rgba(187, 141, 80, 0.2));
 }
 
+.timeline[data-scroll-track]::after {
+  position: absolute;
+  z-index: 2;
+  top: 0.1rem;
+  left: 0;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  content: '';
+  background: var(--maroon);
+  box-shadow: 0 0 0 4px var(--ivory), 0 4px 12px rgba(81, 27, 37, 0.22);
+  transform: translateY(var(--timeline-marker-y, 0));
+  will-change: transform;
+}
+
 .timeline__item {
   position: relative;
 }
@@ -1245,6 +1261,15 @@ a.mini-cal__hl:hover {
   font-style: italic;
 }
 
+.celebrations__cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.celebrations__cta .button {
+  margin: 0;
+}
 
 .rsvp {
   padding-block: clamp(4.5rem, 9vw, 7.5rem);
@@ -1643,6 +1668,75 @@ a.mini-cal__hl:hover {
   font-weight: 600;
 }
 
+.locations {
+  padding-block: clamp(4.5rem, 9vw, 7rem);
+  background: linear-gradient(160deg, var(--ivory), var(--blush));
+}
+
+.locations__intro {
+  max-width: 42rem;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.locations__intro .section-title {
+  margin-bottom: 0.75rem;
+}
+
+.locations__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.location-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.location-card__map {
+  aspect-ratio: 16 / 10;
+  border-bottom: 1px solid var(--line);
+  background: var(--blush);
+}
+
+.location-card__map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.location-card__body {
+  padding: 1.35rem;
+}
+
+.location-card__body h3 {
+  margin: 0.25rem 0 0.35rem;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+}
+
+.location-card__body > p:not(.location-card__day) {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.location-card__day {
+  margin: 0;
+  color: var(--maroon);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.location-card .button {
+  margin-top: 1rem;
+}
 
 .closing {
   position: relative;
@@ -2544,7 +2638,8 @@ a.mini-cal__hl:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .faq__inner {
+  .faq__inner,
+  .locations__grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }
@@ -2698,6 +2793,19 @@ a.mini-cal__hl:hover {
   .celebrations__cta {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .celebrations__cta-actions,
+  .celebrations__cta-actions .button {
+    width: 100%;
+  }
+
+  .celebrations__cta-actions {
+    flex-direction: column;
+  }
+
+  .location-card__map {
+    aspect-ratio: 4 / 3;
   }
 
   .site-footer {
