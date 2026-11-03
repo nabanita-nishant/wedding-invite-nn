@@ -10,6 +10,7 @@ import '../styles/global.css';
 
 const baseUrl = import.meta.env.BASE_URL;
 const assetBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+const storyImageUrl = `${assetBase}ChatGPT%20Image%20Nov%203,%202026,%2001_27_49%20PM.jpg`;
 const { couple } = wedding;
 const title = `${couple.firstName} & ${couple.secondName} | ${wedding.date}`;
 const description = `Join ${couple.firstName} and ${couple.secondName} for their wedding celebrations on ${wedding.date} in ${wedding.location}.`;
@@ -165,21 +166,29 @@ const petals = [
       <section class="welcome" id="welcome" aria-labelledby="welcome-title">
         <div class="welcome__decor" aria-hidden="true">N</div>
         <div class="container welcome__grid">
+          <div class="welcome-story reveal">
+            <div class="welcome-story__floral" aria-hidden="true"><FloralMark /></div>
+            <figure class="welcome-story__photo">
+              <img
+                src={storyImageUrl}
+                alt="Nabanita and Nishant walking together beneath flowering trees"
+                width="1120"
+                height="1536"
+                loading="lazy"
+              />
+            </figure>
+            <div class="welcome-story__card" aria-hidden="true">
+              <span>A story in two chapters</span>
+              <FloralMark />
+              <strong>N <i>&amp;</i> N</strong>
+              <small>schoolmates,<br />soulmates</small>
+            </div>
+          </div>
           <div class="welcome__copy reveal">
             <SectionLabel eyebrow={wedding.welcome.eyebrow} />
             <h2 class="section-title" id="welcome-title">{wedding.welcome.title}</h2>
             <p class="section-lead">{wedding.welcome.copy}</p>
             <p class="welcome__signoff">{wedding.welcome.signoff}</p>
-          </div>
-          <div class="welcome-art reveal" aria-hidden="true">
-            <div class="welcome-art__halo"></div>
-            <div class="welcome-art__card">
-              <span class="welcome-art__topline">A story in two chapters</span>
-              <FloralMark />
-              <span class="welcome-art__names">N <i>&amp;</i> N</span>
-              <span class="welcome-art__caption">schoolmates, soulmates</span>
-            </div>
-            <span class="welcome-art__stamp">Tezpur<br />Assam</span>
           </div>
         </div>
       </section>

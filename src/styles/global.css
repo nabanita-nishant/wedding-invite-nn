@@ -819,7 +819,7 @@ a.mini-cal__hl:hover {
 .welcome__grid {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   align-items: center;
   gap: clamp(3rem, 7vw, 7rem);
 }
@@ -832,95 +832,108 @@ a.mini-cal__hl:hover {
   font-style: italic;
 }
 
-.welcome-art {
+.welcome-story {
   position: relative;
-  min-height: 420px;
+  width: min(100%, 30rem);
+  min-height: 35rem;
+  padding: 1.5rem 3rem 4rem 2.75rem;
 }
 
-.welcome-art__halo {
+.welcome-story::before {
   position: absolute;
-  top: 2.5rem;
-  left: 50%;
-  width: 21rem;
-  height: 21rem;
-  border: 1px solid rgba(187, 141, 80, 0.35);
-  border-radius: 52% 48% 62% 38%;
-  background: var(--blush);
-  transform: translateX(-50%) rotate(35deg);
-}
-
-.welcome-art__halo::before,
-.welcome-art__halo::after {
-  position: absolute;
-  inset: 1rem;
-  border: 1px solid rgba(126, 38, 49, 0.2);
-  border-radius: inherit;
+  inset: 7% 3% 4% 4%;
+  border-radius: 50% 46% 48% 52%;
   content: '';
+  background: var(--blush);
+  opacity: 0.6;
+  transform: rotate(5deg);
 }
 
-.welcome-art__halo::after {
-  inset: 3rem;
-  border-color: rgba(187, 141, 80, 0.3);
+.welcome-story__photo {
+  position: relative;
+  z-index: 1;
+  width: 78%;
+  aspect-ratio: 4 / 5;
+  margin: 0 auto;
+  padding: 0.55rem 0.55rem 1.7rem;
+  background: #fffdf8;
+  box-shadow: 0 22px 55px rgba(72, 35, 30, 0.2);
+  transform: rotate(-6deg);
 }
 
-.welcome-art__card {
+.welcome-story__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 70%;
+}
+
+.welcome-story__floral {
   position: absolute;
-  top: 5.5rem;
-  left: 50%;
+  z-index: 2;
+  top: 24%;
+  left: -1rem;
+  width: 8rem;
+  color: var(--maroon);
+  transform: rotate(-26deg);
+}
+
+.welcome-story__floral .floral-mark {
+  width: 100%;
+}
+
+.welcome-story__card {
+  position: absolute;
+  z-index: 3;
+  right: 1.5rem;
+  bottom: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 14.5rem;
-  min-height: 18rem;
-  padding: 2.1rem 1rem 1.5rem;
+  width: 10.5rem;
+  min-height: 13.25rem;
+  padding: 1.25rem 0.8rem 1rem;
   color: var(--ivory);
   background: var(--maroon);
-  box-shadow: var(--shadow);
-  transform: translateX(-50%) rotate(-7deg);
+  box-shadow: 0 18px 35px rgba(81, 27, 37, 0.28);
+  text-align: center;
+  transform: rotate(-8deg);
 }
 
-.welcome-art__topline {
-  font-size: 0.6rem;
-  letter-spacing: 0.18em;
+.welcome-story__card > span {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.welcome-art__card .floral-mark {
-  width: 5.2rem;
-  margin: 2.1rem 0 1.4rem;
+.welcome-story__card .floral-mark {
+  width: 3rem;
+  margin: 1.1rem 0 0.75rem;
 }
 
-.welcome-art__names {
+.welcome-story__card strong {
   font-family: var(--display);
-  font-size: 3.4rem;
-  line-height: 0.9;
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1;
 }
 
-.welcome-art__names i {
+.welcome-story__card strong i {
   color: var(--gold-light);
   font-family: var(--serif);
-  font-size: 1.7rem;
+  font-size: 1.2rem;
 }
 
-.welcome-art__caption {
-  margin-top: 1.8rem;
+.welcome-story__card small {
+  margin-top: 1rem;
   color: var(--gold-light);
-  font-family: var(--serif);
-  font-size: 0.8rem;
-  font-style: italic;
-}
-
-.welcome-art__stamp {
-  position: absolute;
-  right: 1rem;
-  bottom: 2rem;
-  color: var(--maroon);
-  font-family: var(--serif);
-  font-size: 0.8rem;
-  font-style: italic;
-  line-height: 1.1;
-  text-align: center;
-  transform: rotate(8deg);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.5;
+  text-transform: uppercase;
 }
 
 
@@ -2257,35 +2270,25 @@ a.mini-cal__hl:hover {
   }
 }
 
-@keyframes card-appear {
+@keyframes photo-appear {
   from {
     opacity: 0;
-    transform: translateX(-50%) rotate(-14deg) scale(0.85);
+    transform: translateY(18px) rotate(-11deg) scale(0.94);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) rotate(-7deg) scale(1);
+    transform: translateY(0) rotate(-6deg) scale(1);
   }
 }
 
-@keyframes halo-breathe {
-  0%,
-  100% {
-    transform: translateX(-50%) rotate(35deg) scale(1);
-  }
-  50% {
-    transform: translateX(-50%) rotate(38deg) scale(1.04);
-  }
-}
-
-@keyframes stamp-in {
+@keyframes story-card-appear {
   from {
     opacity: 0;
-    transform: rotate(15deg) scale(0.7);
+    transform: translateY(20px) rotate(-14deg) scale(0.88);
   }
   to {
     opacity: 1;
-    transform: rotate(8deg) scale(1);
+    transform: translateY(0) rotate(-8deg) scale(1);
   }
 }
 
@@ -2469,16 +2472,12 @@ a.mini-cal__hl:hover {
     animation: faq-open 320ms ease both;
   }
 
-  .welcome-art__card {
-    animation: card-appear 1s cubic-bezier(0.2, 0.75, 0.2, 1) 0.3s both;
+  .welcome-story__photo {
+    animation: photo-appear 1s cubic-bezier(0.2, 0.75, 0.2, 1) 0.15s both;
   }
 
-  .welcome-art__halo {
-    animation: halo-breathe 8s ease-in-out infinite;
-  }
-
-  .welcome-art__stamp {
-    animation: stamp-in 0.7s ease 1s both;
+  .welcome-story__card {
+    animation: story-card-appear 0.85s cubic-bezier(0.2, 0.75, 0.2, 1) 0.55s both;
   }
 }
 
@@ -2595,8 +2594,8 @@ a.mini-cal__hl:hover {
     position: static;
   }
 
-  .welcome-art {
-    min-height: 380px;
+  .welcome-story {
+    margin-inline: auto;
   }
 
   .form-frame {
@@ -2630,26 +2629,6 @@ a.mini-cal__hl:hover {
     width: calc(100% + 1.25rem);
   }
 
-  .welcome__sign {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .welcome__sign .welcome__signoff {
-    margin: 0;
-  }
-
-  .welcome-seal {
-    display: block;
-    flex: none;
-    width: 6.25rem;
-    height: 6.25rem;
-    transform: rotate(-8deg);
-  }
-
   .look {
     padding: 0.85rem;
   }
@@ -2674,50 +2653,53 @@ a.mini-cal__hl:hover {
     display: none;
   }
 
-  .welcome-art {
-    min-height: 280px;
-    margin-top: 1rem;
+  .welcome-story {
+    width: 100%;
+    min-height: 29rem;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem 1.75rem 4rem 1.25rem;
   }
 
-  .welcome-art__halo {
-    top: 1.5rem;
-    width: 15rem;
-    height: 15rem;
+  .welcome-story::before {
+    inset: 8% 0 3% 2%;
   }
 
-  .welcome-art__card {
-    top: 3.5rem;
-    width: 11rem;
-    min-height: 14rem;
-    padding: 1.5rem 0.75rem 1.1rem;
+  .welcome-story__photo {
+    width: 82%;
+    padding: 0.4rem 0.4rem 1.25rem;
+    transform: rotate(-6deg);
   }
 
-  .welcome-art__topline {
+  .welcome-story__floral {
+    top: 24%;
+    left: -1.75rem;
+    width: 6.25rem;
+  }
+
+  .welcome-story__card {
+    right: 0;
+    bottom: 1.5rem;
+    width: 8.75rem;
+    min-height: 10.75rem;
+    padding: 1rem 0.6rem 0.8rem;
+  }
+
+  .welcome-story__card > span {
+    font-size: 0.45rem;
+  }
+
+  .welcome-story__card .floral-mark {
+    width: 2.25rem;
+    margin: 0.8rem 0 0.5rem;
+  }
+
+  .welcome-story__card strong {
+    font-size: 2rem;
+  }
+
+  .welcome-story__card small {
+    margin-top: 0.7rem;
     font-size: 0.5rem;
-  }
-
-  .welcome-art__card .floral-mark {
-    width: 3.8rem;
-    margin: 1.4rem 0 1rem;
-  }
-
-  .welcome-art__names {
-    font-size: 2.6rem;
-  }
-
-  .welcome-art__names i {
-    font-size: 1.3rem;
-  }
-
-  .welcome-art__caption {
-    margin-top: 1.2rem;
-    font-size: 0.65rem;
-  }
-
-  .welcome-art__stamp {
-    right: 0.5rem;
-    bottom: 1rem;
-    font-size: 0.65rem;
   }
 
   .hero__actions {

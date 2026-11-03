@@ -32,7 +32,7 @@ This repository contains the digital wedding invitation for Nabanita and Nishant
 
 - Follow the Heritage Modern direction: ivory, maroon, vermilion, antique gold, blush, saffron, floral and paisley-inspired line motifs.
 - Keep the design modern and spacious instead of densely ornamental.
-- Do not add stock photography or unrelated imagery. The first release uses illustration, floral patterns, and typography.
+- Do not add stock photography or unrelated imagery. The supplied couple photograph is used only in the Welcome section alongside illustration, floral patterns, and typography.
 - Use expressive display typography for names and headings and a highly readable body typeface.
 - Respect `prefers-reduced-motion`, keyboard navigation, responsive layouts, and readable color contrast.
 - Decorative SVGs must be marked as hidden or given an appropriate accessible label.

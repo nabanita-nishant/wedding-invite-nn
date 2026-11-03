@@ -34,7 +34,7 @@ Use a "Heritage Modern" design language:
 - Expressive display typography for the couple's names and headings
 - Highly readable body text
 - Subtle page-load and scroll-reveal motion with reduced-motion support
-- No photography in the first release; use illustration, pattern, and typography
+- Use the supplied couple photograph only in the Welcome section; keep the rest illustration, pattern, and typography-led
 
 ## Confirmed content
 
