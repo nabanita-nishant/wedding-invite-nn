@@ -63,7 +63,7 @@ export const wedding = {
   welcome: {
     eyebrow: 'Welcome to our wedding',
     title: 'A familiar beginning. A new chapter. A future together.',
-    copy: 'From being school classmates to choosing to move forward together, life has brought us to a new beginning. We are delighted to celebrate this special chapter with our family and friends and look forward to sharing these intimate moments with the people who matter most to us.',
+    copy: 'From being classmates to choosing to move forward together, life has brought us to a new beginning. We are delighted to celebrate this special chapter with our family and friends and look forward to sharing these intimate moments with the people who matter most to us.',
     signoff: 'With love, Nabanita & Nishant',
   },
   days: [
